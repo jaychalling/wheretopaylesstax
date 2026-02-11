@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Country {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  name        String
+  flagEmoji   String   @map("flag_emoji")
+  region      String
+  subRegion   String?  @map("sub_region")
+  currency    String
+  capitalCity String   @map("capital_city")
+  population  Int?
+  language    String?
+
+  // Tax rates (stored as percentages, e.g. 25.0 = 25%)
+  incomeTaxMin        Float   @default(0) @map("income_tax_min")
+  incomeTaxMax        Float   @default(0) @map("income_tax_max")
+  corporateTax        Float   @default(0) @map("corporate_tax")
+  vatRate             Float   @default(0) @map("vat_rate")
+  capitalGainsTax     Float   @default(0) @map("capital_gains_tax")
+  dividendTax         Float   @default(0) @map("dividend_tax")
+  wealthTax           Float   @default(0) @map("wealth_tax")
+  inheritanceTax      Float   @default(0) @map("inheritance_tax")
+  socialSecurity      Float   @default(0) @map("social_security")
+
+  // Digital nomad info
+  hasDigitalNomadVisa Boolean @default(false) @map("has_digital_nomad_visa")
+  costOfLivingIndex   Float?  @map("cost_of_living_index")
+  qualityOfLifeIndex  Float?  @map("quality_of_life_index")
+  internetSpeed       Float?  @map("internet_speed")
+
+  // Special tax regimes
+  specialRegimes     String?  @map("special_regimes") // JSON string
+  taxBrackets        String?  @map("tax_brackets")    // JSON string
+
+  // SEO
+  metaTitle       String?  @map("meta_title")
+  metaDescription String?  @map("meta_description")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  comparisonsA Comparison[] @relation("CountryA")
+  comparisonsB Comparison[] @relation("CountryB")
+
+  @@map("countries")
+}
+
+model Comparison {
+  id        Int    @id @default(autoincrement())
+  slug      String @unique
+  countryAId Int   @map("country_a_id")
+  countryBId Int   @map("country_b_id")
+
+  countryA Country @relation("CountryA", fields: [countryAId], references: [id])
+  countryB Country @relation("CountryB", fields: [countryBId], references: [id])
+
+  metaTitle       String?  @map("meta_title")
+  metaDescription String?  @map("meta_description")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("comparisons")
+}
+
+model Guide {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  title     String
+  excerpt   String
+  content   String   // Markdown content
+  tags      String   // Comma-separated tags
+  author    String   @default("WhereToPayLessTax Team")
+
+  // SEO
+  metaTitle       String?  @map("meta_title")
+  metaDescription String?  @map("meta_description")
+
+  publishedAt DateTime? @map("published_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("guides")
+}

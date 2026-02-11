@@ -1,0 +1,260 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== BASE LAYER ===== */
+@layer base {
+  :root {
+    --background: #F8FAFC;
+    --foreground: #0F172A;
+    --surface: #FFFFFF;
+    --surface-elevated: #FFFFFF;
+    --border: #E2E8F0;
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #94A3B8;
+  }
+
+  .dark {
+    --background: #0F172A;
+    --foreground: #F8FAFC;
+    --surface: #1E293B;
+    --surface-elevated: #334155;
+    --border: #334155;
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 font-body antialiased;
+    @apply dark:bg-slate-900 dark:text-slate-50;
+  }
+
+  /* Typography defaults */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-semibold text-slate-800 dark:text-slate-100;
+  }
+
+  h1 {
+    @apply text-4xl leading-tight tracking-tight;
+  }
+
+  h2 {
+    @apply text-3xl leading-snug;
+  }
+
+  h3 {
+    @apply text-2xl leading-snug;
+  }
+
+  h4 {
+    @apply text-xl leading-normal;
+  }
+
+  h5 {
+    @apply text-lg leading-normal font-medium;
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
+
+  a {
+    @apply text-primary-600 dark:text-primary-400 transition-colors duration-150;
+  }
+
+  a:hover {
+    @apply text-primary-700 dark:text-primary-300;
+  }
+
+  /* Focus styles for accessibility */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ===== COMPONENT LAYER ===== */
+@layer components {
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center font-heading font-semibold rounded-md
+           transition-all duration-150 ease-in-out
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+  }
+
+  .btn-sm {
+    @apply h-8 px-4 text-sm;
+  }
+
+  .btn-md {
+    @apply h-10 px-6 text-base;
+  }
+
+  .btn-lg {
+    @apply h-12 px-8 text-lg;
+  }
+
+  .btn-primary {
+    @apply btn bg-accent-500 text-slate-900 shadow-sm
+           hover:bg-accent-600 hover:shadow-md
+           active:bg-accent-700
+           focus-visible:ring-accent-500;
+  }
+
+  .btn-secondary {
+    @apply btn bg-primary-600 text-white
+           hover:bg-primary-700
+           active:bg-primary-800
+           focus-visible:ring-primary-500;
+  }
+
+  .btn-outline {
+    @apply btn border border-slate-300 text-slate-700 bg-transparent
+           hover:bg-slate-50 hover:border-primary-600 hover:text-primary-600
+           dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:border-primary-400 dark:hover:text-primary-400
+           focus-visible:ring-primary-500;
+  }
+
+  .btn-ghost {
+    @apply btn text-primary-600 bg-transparent
+           hover:bg-primary-50
+           dark:text-primary-400 dark:hover:bg-primary-950
+           focus-visible:ring-primary-500;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700
+           rounded-lg p-6 shadow transition-all duration-150;
+  }
+
+  .card-hover {
+    @apply card hover:shadow-md hover:-translate-y-0.5;
+  }
+
+  .card-highlighted {
+    @apply card border-2 border-primary-600 dark:border-primary-400;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center px-3 py-0.5 rounded-full text-xs font-semibold font-body;
+  }
+
+  .badge-success {
+    @apply badge bg-success-50 text-success-700 dark:bg-success-700/20 dark:text-success-500;
+  }
+
+  .badge-warning {
+    @apply badge bg-warning-50 text-warning-600 dark:bg-warning-600/20 dark:text-warning-500;
+  }
+
+  .badge-danger {
+    @apply badge bg-danger-50 text-danger-600 dark:bg-danger-600/20 dark:text-danger-500;
+  }
+
+  .badge-info {
+    @apply badge bg-info-50 text-primary-700 dark:bg-primary-700/20 dark:text-primary-400;
+  }
+
+  .badge-neutral {
+    @apply badge bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300;
+  }
+
+  /* Tax rate display */
+  .tax-rate {
+    @apply font-heading font-bold text-tax-number;
+  }
+
+  .tax-rate-low {
+    @apply tax-rate text-success-600 dark:text-success-500;
+  }
+
+  .tax-rate-medium {
+    @apply tax-rate text-warning-600 dark:text-warning-500;
+  }
+
+  .tax-rate-high {
+    @apply tax-rate text-danger-600 dark:text-danger-500;
+  }
+
+  /* Section spacing */
+  .section {
+    @apply py-12 md:py-16 lg:py-20;
+  }
+
+  .section-sm {
+    @apply py-8 md:py-12;
+  }
+
+  /* Comparison table */
+  .comparison-table {
+    @apply w-full border-collapse;
+  }
+
+  .comparison-table thead {
+    @apply bg-slate-800 dark:bg-slate-700 text-white;
+  }
+
+  .comparison-table th {
+    @apply px-4 py-3 text-left text-sm font-heading font-semibold;
+  }
+
+  .comparison-table td {
+    @apply px-4 py-3 text-sm border-b border-slate-200 dark:border-slate-700;
+  }
+
+  .comparison-table tbody tr:nth-child(even) {
+    @apply bg-slate-50 dark:bg-slate-800/50;
+  }
+
+  .comparison-table tbody tr:hover {
+    @apply bg-primary-50 dark:bg-primary-950/30;
+  }
+
+  /* Container utility */
+  .page-container {
+    @apply container mx-auto px-4 md:px-6 lg:px-8 max-w-[1280px];
+  }
+}
+
+/* ===== UTILITY LAYER ===== */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Gradient text utility */
+  .text-gradient-primary {
+    @apply bg-gradient-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent;
+  }
+
+  /* Sticky first column for mobile tables */
+  .sticky-col-first td:first-child,
+  .sticky-col-first th:first-child {
+    @apply sticky left-0 z-10 bg-inherit;
+  }
+
+  /* Hide scrollbar but keep scroll */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

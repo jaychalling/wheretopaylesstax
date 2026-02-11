@@ -44,7 +44,7 @@ export default function NewsletterForm({ variant = "inline" }: NewsletterFormPro
           Subscribe
         </button>
         {status === "success" && (
-          <p className="text-success-500 text-xs mt-1 sm:mt-0 sm:ml-2 self-center">Subscribed!</p>
+          <p className="text-success-500 text-xs mt-1 sm:mt-0 sm:ml-2 self-center">Newsletter coming soon! We&apos;ll notify you when it&apos;s ready.</p>
         )}
         {status === "error" && (
           <p className="text-danger-500 text-xs mt-1 sm:mt-0 sm:ml-2 self-center">Invalid email</p>
@@ -83,7 +83,7 @@ export default function NewsletterForm({ variant = "inline" }: NewsletterFormPro
           </button>
         </form>
         {status === "success" && (
-          <p className="text-success-600 dark:text-success-500 text-xs mt-2">Thanks for subscribing!</p>
+          <p className="text-success-600 dark:text-success-500 text-xs mt-2">Newsletter coming soon! We&apos;ll notify you when it&apos;s ready.</p>
         )}
         {status === "error" && (
           <p className="text-danger-600 dark:text-danger-500 text-xs mt-2">Please enter a valid email.</p>

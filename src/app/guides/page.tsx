@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllGuides, getGuideCategories, type GuideData } from "@/lib/data";
+import { formatDate, getCategoryColor } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Tax Guides & Articles",
@@ -12,25 +13,6 @@ export const metadata: Metadata = {
       "In-depth guides on international tax planning, digital nomad taxes, freelancer optimization, and the best low-tax countries.",
   },
 };
-
-function formatDate(dateStr: string): string {
-  const [year, month] = dateStr.split("-");
-  const date = new Date(parseInt(year), parseInt(month) - 1);
-  return date.toLocaleDateString("en-US", { year: "numeric", month: "long" });
-}
-
-function getCategoryColor(category: string): string {
-  switch (category) {
-    case "Digital Nomad":
-      return "badge-info";
-    case "Country/Region":
-      return "badge-success";
-    case "Tax Strategy":
-      return "badge-warning";
-    default:
-      return "badge-neutral";
-  }
-}
 
 function GuideCard({ guide }: { guide: GuideData }) {
   const excerpt =

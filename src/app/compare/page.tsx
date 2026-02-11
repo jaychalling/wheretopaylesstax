@@ -5,6 +5,7 @@ import {
   getCountryBySlug,
   type CountryData,
 } from "@/lib/data";
+import { getTaxRateColorExplicit as getTaxRateColor } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Compare Tax Rates Between Countries",
@@ -23,12 +24,6 @@ export const metadata: Metadata = {
       "Side-by-side tax comparison between 20 popular country pairs.",
   },
 };
-
-function getTaxRateColor(rate: number): string {
-  if (rate <= 15) return "text-success-600 dark:text-success-500";
-  if (rate <= 30) return "text-warning-600 dark:text-warning-500";
-  return "text-danger-600 dark:text-danger-500";
-}
 
 function ComparisonListCard({
   countryA,

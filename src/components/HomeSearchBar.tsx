@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
 interface CountryOption {
@@ -15,6 +15,7 @@ export default function HomeSearchBar() {
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -27,14 +28,16 @@ export default function HomeSearchBar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  async function handleSearch(value: string) {
-    setQuery(value);
-    if (value.length < 2) {
-      setResults([]);
-      setIsOpen(false);
-      return;
-    }
+  // Cleanup debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
 
+  const fetchResults = useCallback(async (value: string) => {
     try {
       const res = await fetch(`/api/search?q=${encodeURIComponent(value)}`);
       const data = await res.json();
@@ -43,6 +46,26 @@ export default function HomeSearchBar() {
     } catch {
       setResults([]);
     }
+  }, []);
+
+  function handleSearch(value: string) {
+    setQuery(value);
+
+    // Clear any pending debounce timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    if (value.length < 2) {
+      setResults([]);
+      setIsOpen(false);
+      return;
+    }
+
+    // Debounce the API call by 300ms
+    debounceTimerRef.current = setTimeout(() => {
+      fetchResults(value);
+    }, 300);
   }
 
   function handleSelect(slug: string) {

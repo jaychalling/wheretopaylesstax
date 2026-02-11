@@ -2,21 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-
-interface CountryData {
-  slug: string;
-  name: string;
-  flag: string;
-  incomeTax: { topRate: number };
-  corporateTax: { standardRate: number };
-  vat: { standardRate: number };
-}
-
-function getTaxRateColor(rate: number): string {
-  if (rate <= 15) return "tax-rate-low";
-  if (rate <= 30) return "tax-rate-medium";
-  return "tax-rate-high";
-}
+import type { CountryData } from "@/lib/data";
+import { getTaxRateColor } from "@/lib/utils";
 
 export default function RegionTabs({
   regions,

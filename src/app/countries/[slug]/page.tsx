@@ -7,6 +7,7 @@ import {
   getCountriesByRegion,
   getRelatedComparisons,
 } from "@/lib/data";
+import { getTaxRateColor } from "@/lib/utils";
 import AdPlaceholder from "@/components/AdPlaceholder";
 
 // Generate static params for all 50 countries
@@ -41,12 +42,6 @@ export function generateMetadata({
       description: `Income tax ${country.incomeTax.topRate}%, Corporate tax ${country.corporateTax.standardRate}%, VAT ${country.vat.standardRate}%. Complete ${country.name} tax profile for expats and digital nomads.`,
     },
   };
-}
-
-function getTaxRateColor(rate: number): string {
-  if (rate <= 15) return "tax-rate-low";
-  if (rate <= 30) return "tax-rate-medium";
-  return "tax-rate-high";
 }
 
 function formatCurrency(amount: number): string {

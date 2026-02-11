@@ -6,6 +6,7 @@ import {
   getComparisonBySlug,
   type CountryData,
 } from "@/lib/data";
+import { getTaxRateColorExplicit as getTaxRateColor } from "@/lib/utils";
 import AdPlaceholder from "@/components/AdPlaceholder";
 
 // Generate static params for all 20 comparison slugs
@@ -40,12 +41,6 @@ export function generateMetadata({
       description: `Side-by-side tax comparison: ${countryA.name} (${countryA.flag}) vs ${countryB.name} (${countryB.flag}).`,
     },
   };
-}
-
-function getTaxRateColor(rate: number): string {
-  if (rate <= 15) return "text-success-600 dark:text-success-500";
-  if (rate <= 30) return "text-warning-600 dark:text-warning-500";
-  return "text-danger-600 dark:text-danger-500";
 }
 
 function WinnerBadge() {

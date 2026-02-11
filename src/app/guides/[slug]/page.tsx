@@ -9,6 +9,7 @@ import {
   type GuideData,
   type GuideSection,
 } from "@/lib/data";
+import { formatDate, getCategoryColor } from "@/lib/utils";
 import AdPlaceholder from "@/components/AdPlaceholder";
 import NewsletterForm from "@/components/NewsletterForm";
 
@@ -47,30 +48,11 @@ export function generateMetadata({
   };
 }
 
-function formatDate(dateStr: string): string {
-  const [year, month] = dateStr.split("-");
-  const date = new Date(parseInt(year), parseInt(month) - 1);
-  return date.toLocaleDateString("en-US", { year: "numeric", month: "long" });
-}
-
 function slugify(text: string): string {
   return text
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
-}
-
-function getCategoryColor(category: string): string {
-  switch (category) {
-    case "Digital Nomad":
-      return "badge-info";
-    case "Country/Region":
-      return "badge-success";
-    case "Tax Strategy":
-      return "badge-warning";
-    default:
-      return "badge-neutral";
-  }
 }
 
 // Render content with basic markdown (bold, lists, numbered lists)

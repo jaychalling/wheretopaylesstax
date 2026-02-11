@@ -11,41 +11,58 @@ datasource db {
 }
 
 model Country {
-  id          Int      @id @default(autoincrement())
-  slug        String   @unique
-  name        String
-  flagEmoji   String   @map("flag_emoji")
-  region      String
-  subRegion   String?  @map("sub_region")
-  currency    String
-  capitalCity String   @map("capital_city")
-  population  Int?
-  language    String?
+  id       Int    @id @default(autoincrement())
+  slug     String @unique
+  name     String
+  flag     String @default("")
+  region   String
+  currency String
 
-  // Tax rates (stored as percentages, e.g. 25.0 = 25%)
-  incomeTaxMin        Float   @default(0) @map("income_tax_min")
-  incomeTaxMax        Float   @default(0) @map("income_tax_max")
-  corporateTax        Float   @default(0) @map("corporate_tax")
-  vatRate             Float   @default(0) @map("vat_rate")
-  capitalGainsTax     Float   @default(0) @map("capital_gains_tax")
-  dividendTax         Float   @default(0) @map("dividend_tax")
-  wealthTax           Float   @default(0) @map("wealth_tax")
-  inheritanceTax      Float   @default(0) @map("inheritance_tax")
-  socialSecurity      Float   @default(0) @map("social_security")
+  // Income tax (JSON: brackets array + topRate + notes)
+  incomeTaxTopRate Float   @default(0) @map("income_tax_top_rate")
+  incomeTaxBrackets String? @map("income_tax_brackets") // JSON string of brackets array
+  incomeTaxNotes   String? @map("income_tax_notes")
 
-  // Digital nomad info
-  hasDigitalNomadVisa Boolean @default(false) @map("has_digital_nomad_visa")
-  costOfLivingIndex   Float?  @map("cost_of_living_index")
-  qualityOfLifeIndex  Float?  @map("quality_of_life_index")
-  internetSpeed       Float?  @map("internet_speed")
+  // Corporate tax
+  corporateTaxRate          Float   @default(0) @map("corporate_tax_rate")
+  corporateTaxSmallBizRate  Float?  @map("corporate_tax_small_biz_rate")
+  corporateTaxNotes         String? @map("corporate_tax_notes")
 
-  // Special tax regimes
-  specialRegimes     String?  @map("special_regimes") // JSON string
-  taxBrackets        String?  @map("tax_brackets")    // JSON string
+  // VAT
+  vatStandardRate Float   @default(0) @map("vat_standard_rate")
+  vatReducedRates String? @map("vat_reduced_rates") // JSON string of rates array
+  vatNotes        String? @map("vat_notes")
 
-  // SEO
-  metaTitle       String?  @map("meta_title")
-  metaDescription String?  @map("meta_description")
+  // Capital gains tax
+  capitalGainsTaxRate     Float   @default(0) @map("capital_gains_tax_rate")
+  capitalGainsTaxLongTerm Float?  @map("capital_gains_tax_long_term")
+  capitalGainsTaxNotes    String? @map("capital_gains_tax_notes")
+
+  // Social security
+  socialSecurityEmployee     Float   @default(0) @map("social_security_employee")
+  socialSecurityEmployer     Float   @default(0) @map("social_security_employer")
+  socialSecuritySelfEmployed Float?  @map("social_security_self_employed")
+  socialSecurityNotes        String? @map("social_security_notes")
+
+  // Special regimes (JSON array of objects)
+  specialRegimes String? @map("special_regimes")
+
+  // Indexes and lifestyle
+  taxTreaties        Int     @default(0) @map("tax_treaties")
+  costOfLivingIndex  Float?  @map("cost_of_living_index")
+  qualityOfLifeIndex Float?  @map("quality_of_life_index")
+
+  // Digital nomad
+  digitalNomadVisa        Boolean @default(false) @map("digital_nomad_visa")
+  digitalNomadVisaDetails String? @map("digital_nomad_visa_details")
+
+  // Summary & SEO content
+  summary String?
+  pros    String? // JSON array
+  cons    String? // JSON array
+  bestFor String? @map("best_for") // JSON array
+
+  lastUpdated String? @map("last_updated")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

@@ -2,20 +2,8 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-
-interface CountryData {
-  slug: string;
-  name: string;
-  flag: string;
-  region: string;
-  incomeTax: { topRate: number };
-  corporateTax: { standardRate: number };
-  vat: { standardRate: number };
-  capitalGainsTax: { rate: number };
-  costOfLivingIndex: number;
-  qualityOfLifeIndex: number;
-  digitalNomadVisa: boolean;
-}
+import type { CountryData } from "@/lib/data";
+import { getTaxRateColorExplicit as getTaxRateColor } from "@/lib/utils";
 
 type SortField = "incomeTax" | "corporateTax" | "vat" | "capitalGains" | "costOfLiving";
 
@@ -26,12 +14,6 @@ const SORT_OPTIONS: { label: string; field: SortField }[] = [
   { label: "Capital Gains", field: "capitalGains" },
   { label: "Cost of Living", field: "costOfLiving" },
 ];
-
-function getTaxRateColor(rate: number): string {
-  if (rate <= 15) return "text-success-600 dark:text-success-500";
-  if (rate <= 30) return "text-warning-600 dark:text-warning-500";
-  return "text-danger-600 dark:text-danger-500";
-}
 
 function getRateValue(country: CountryData, field: SortField): number {
   switch (field) {

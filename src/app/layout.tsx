@@ -58,6 +58,9 @@ export const metadata: Metadata = {
     description:
       "Compare tax rates across 50+ countries for digital nomads and expats.",
   },
+  icons: {
+    icon: "/favicon.svg",
+  },
   robots: {
     index: true,
     follow: true,

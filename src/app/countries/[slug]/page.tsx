@@ -577,11 +577,27 @@ export default function CountryDetailPage({
                   authoritative sources:
                 </p>
                 <ul className="list-disc list-inside space-y-1 text-slate-500">
-                  <li>OECD Tax Database</li>
-                  <li>Tax Foundation International Tax Competitiveness Index</li>
-                  <li>World Bank Doing Business Reports</li>
+                  <li>
+                    <a href="https://www.oecd.org/tax/tax-policy/tax-database/" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">
+                      OECD Tax Database
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://taxfoundation.org/research/all/global/international-tax-competitiveness-index/" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">
+                      Tax Foundation International Tax Competitiveness Index
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://www.worldbank.org/en/programs/business-enabling-environment" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">
+                      World Bank Business Enabling Environment
+                    </a>
+                  </li>
                   <li>{country.name} government tax authority publications</li>
-                  <li>PwC Worldwide Tax Summaries</li>
+                  <li>
+                    <a href="https://taxsummaries.pwc.com/" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">
+                      PwC Worldwide Tax Summaries
+                    </a>
+                  </li>
                 </ul>
                 <p className="text-xs text-slate-400">
                   Last verified: {country.lastUpdated}

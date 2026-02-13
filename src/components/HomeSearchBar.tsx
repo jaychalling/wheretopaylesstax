@@ -1,21 +1,29 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import countriesData from "@/data/countries.json";
 
 interface CountryOption {
   slug: string;
   name: string;
   flag: string;
+  region: string;
 }
+
+// Build a lightweight search index at module level (only name/slug/flag/region)
+const searchIndex: CountryOption[] = (countriesData as CountryOption[]).map((c) => ({
+  slug: c.slug,
+  name: c.name,
+  flag: c.flag,
+  region: c.region,
+}));
 
 export default function HomeSearchBar() {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<CountryOption[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -28,44 +36,23 @@ export default function HomeSearchBar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Cleanup debounce timer on unmount
-  useEffect(() => {
-    return () => {
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
-    };
-  }, []);
-
-  const fetchResults = useCallback(async (value: string) => {
-    try {
-      const res = await fetch(`/api/search?q=${encodeURIComponent(value)}`);
-      const data = await res.json();
-      setResults(data.countries || []);
-      setIsOpen(true);
-    } catch {
-      setResults([]);
-    }
-  }, []);
+  // Client-side filtering — no API call needed
+  const results = useMemo(() => {
+    if (query.length < 2) return [];
+    const q = query.toLowerCase();
+    return searchIndex
+      .filter(
+        (c) =>
+          c.name.toLowerCase().includes(q) ||
+          c.slug.includes(q) ||
+          c.region.toLowerCase().includes(q)
+      )
+      .slice(0, 8);
+  }, [query]);
 
   function handleSearch(value: string) {
     setQuery(value);
-
-    // Clear any pending debounce timer
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current);
-    }
-
-    if (value.length < 2) {
-      setResults([]);
-      setIsOpen(false);
-      return;
-    }
-
-    // Debounce the API call by 300ms
-    debounceTimerRef.current = setTimeout(() => {
-      fetchResults(value);
-    }, 300);
+    setIsOpen(value.length >= 2);
   }
 
   function handleSelect(slug: string) {

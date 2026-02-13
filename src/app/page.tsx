@@ -16,10 +16,10 @@ export const metadata: Metadata = {
     title: "Compare Taxes Across 50+ Countries | WhereToPayLessTax",
     description:
       "Side-by-side tax comparisons, country rankings, and expert guides. Make data-driven decisions about where to live and work.",
-    url: "https://wheretopayless.tax",
+    url: "https://wheretopaylesstax.com",
   },
   alternates: {
-    canonical: "https://wheretopayless.tax",
+    canonical: "https://wheretopaylesstax.com",
   },
 };
 import { getTaxRateColor } from "@/lib/utils";

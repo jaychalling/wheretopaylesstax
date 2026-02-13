@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/", "/_next/"],
       },
     ],
-    sitemap: "https://wheretopayless.tax/sitemap.xml",
+    sitemap: "https://wheretopaylesstax.com/sitemap.xml",
   };
 }

@@ -27,7 +27,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://wheretopayless.tax"),
+  metadataBase: new URL("https://wheretopaylesstax.com"),
   title: {
     default: "WhereToPayLessTax - Compare Taxes. Move Smarter.",
     template: "%s | WhereToPayLessTax",
@@ -90,26 +90,26 @@ export default function RootLayout({
               "@graph": [
                 {
                   "@type": "Organization",
-                  "@id": "https://wheretopayless.tax/#organization",
+                  "@id": "https://wheretopaylesstax.com/#organization",
                   name: "WhereToPayLessTax",
-                  url: "https://wheretopayless.tax",
+                  url: "https://wheretopaylesstax.com",
                   description:
                     "Compare tax rates across 50+ countries for digital nomads, freelancers, and expats.",
                 },
                 {
                   "@type": "WebSite",
-                  "@id": "https://wheretopayless.tax/#website",
-                  url: "https://wheretopayless.tax",
+                  "@id": "https://wheretopaylesstax.com/#website",
+                  url: "https://wheretopaylesstax.com",
                   name: "WhereToPayLessTax",
                   publisher: {
-                    "@id": "https://wheretopayless.tax/#organization",
+                    "@id": "https://wheretopaylesstax.com/#organization",
                   },
                   potentialAction: {
                     "@type": "SearchAction",
                     target: {
                       "@type": "EntryPoint",
                       urlTemplate:
-                        "https://wheretopayless.tax/countries?q={search_term_string}",
+                        "https://wheretopaylesstax.com/countries?q={search_term_string}",
                     },
                     "query-input": "required name=search_term_string",
                   },

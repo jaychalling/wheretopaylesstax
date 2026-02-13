@@ -42,7 +42,7 @@ export function generateMetadata({
       description: `Side-by-side tax comparison: ${countryA.name} (${countryA.flag}) vs ${countryB.name} (${countryB.flag}).`,
     },
     alternates: {
-      canonical: `https://wheretopayless.tax/compare/${params.slug}`,
+      canonical: `https://wheretopaylesstax.com/compare/${params.slug}`,
     },
   };
 }
@@ -300,19 +300,19 @@ export default function CompareDetailPage({
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://wheretopayless.tax",
+        item: "https://wheretopaylesstax.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Compare",
-        item: "https://wheretopayless.tax/compare",
+        item: "https://wheretopaylesstax.com/compare",
       },
       {
         "@type": "ListItem",
         position: 3,
         name: `${countryA.name} vs ${countryB.name}`,
-        item: `https://wheretopayless.tax/compare/${params.slug}`,
+        item: `https://wheretopaylesstax.com/compare/${params.slug}`,
       },
     ],
   };

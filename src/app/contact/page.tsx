@@ -64,10 +64,10 @@ export default function ContactPage() {
                 opportunities:
               </p>
               <a
-                href="mailto:hello@wheretopayless.tax"
+                href="mailto:hello@wheretopaylesstax.com"
                 className="text-primary-600 dark:text-primary-400 hover:underline font-medium"
               >
-                hello@wheretopayless.tax
+                hello@wheretopaylesstax.com
               </a>
             </div>
 
@@ -98,10 +98,10 @@ export default function ContactPage() {
                 and we will update it promptly.
               </p>
               <a
-                href="mailto:data@wheretopayless.tax"
+                href="mailto:data@wheretopaylesstax.com"
                 className="text-primary-600 dark:text-primary-400 hover:underline font-medium"
               >
-                data@wheretopayless.tax
+                data@wheretopaylesstax.com
               </a>
             </div>
           </div>

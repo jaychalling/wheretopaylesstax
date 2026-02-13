@@ -223,7 +223,7 @@ export default async function Image() {
             display: "flex",
           }}
         >
-          wheretopayless.tax
+          wheretopaylesstax.com
         </div>
       </div>
     ),

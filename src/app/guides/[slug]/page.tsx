@@ -47,7 +47,7 @@ export function generateMetadata({
       description: guide.metaDescription,
     },
     alternates: {
-      canonical: `https://wheretopayless.tax/guides/${params.slug}`,
+      canonical: `https://wheretopaylesstax.com/guides/${params.slug}`,
     },
   };
 }
@@ -301,16 +301,16 @@ function ArticleJsonLd({ guide }: { guide: GuideData }) {
     author: {
       "@type": "Organization",
       name: "WhereToPayLessTax",
-      url: "https://wheretopayless.tax",
+      url: "https://wheretopaylesstax.com",
     },
     publisher: {
       "@type": "Organization",
       name: "WhereToPayLessTax",
-      url: "https://wheretopayless.tax",
+      url: "https://wheretopaylesstax.com",
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://wheretopayless.tax/guides/${guide.slug}`,
+      "@id": `https://wheretopaylesstax.com/guides/${guide.slug}`,
     },
     keywords: guide.targetKeywords.join(", "),
     articleSection: guide.category,
@@ -347,19 +347,19 @@ export default function GuideDetailPage({
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://wheretopayless.tax",
+        item: "https://wheretopaylesstax.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Guides",
-        item: "https://wheretopayless.tax/guides",
+        item: "https://wheretopaylesstax.com/guides",
       },
       {
         "@type": "ListItem",
         position: 3,
         name: guide.title,
-        item: `https://wheretopayless.tax/guides/${guide.slug}`,
+        item: `https://wheretopaylesstax.com/guides/${guide.slug}`,
       },
     ],
   };

@@ -43,7 +43,7 @@ export function generateMetadata({
       description: `Income tax ${country.incomeTax.topRate}%, Corporate tax ${country.corporateTax.standardRate}%, VAT ${country.vat.standardRate}%. Complete ${country.name} tax profile for expats and digital nomads.`,
     },
     alternates: {
-      canonical: `https://wheretopayless.tax/countries/${params.slug}`,
+      canonical: `https://wheretopaylesstax.com/countries/${params.slug}`,
     },
   };
 }
@@ -95,19 +95,19 @@ export default function CountryDetailPage({
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://wheretopayless.tax",
+        item: "https://wheretopaylesstax.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Countries",
-        item: "https://wheretopayless.tax/countries",
+        item: "https://wheretopaylesstax.com/countries",
       },
       {
         "@type": "ListItem",
         position: 3,
         name: country.name,
-        item: `https://wheretopayless.tax/countries/${country.slug}`,
+        item: `https://wheretopaylesstax.com/countries/${country.slug}`,
       },
     ],
   };
@@ -116,7 +116,7 @@ export default function CountryDetailPage({
     "@context": "https://schema.org",
     "@type": "Country",
     name: country.name,
-    url: `https://wheretopayless.tax/countries/${country.slug}`,
+    url: `https://wheretopaylesstax.com/countries/${country.slug}`,
     description: country.summary,
   };
 

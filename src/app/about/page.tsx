@@ -362,10 +362,10 @@ export default function AboutPage() {
                   <span className="text-sm text-slate-700 dark:text-slate-300">
                     Email:{" "}
                     <a
-                      href="mailto:hello@wheretopayless.tax"
+                      href="mailto:hello@wheretopaylesstax.com"
                       className="text-primary-600 dark:text-primary-400 no-underline hover:underline"
                     >
-                      hello@wheretopayless.tax
+                      hello@wheretopaylesstax.com
                     </a>
                   </span>
                 </div>
@@ -387,10 +387,10 @@ export default function AboutPage() {
                   <span className="text-sm text-slate-700 dark:text-slate-300">
                     Data corrections:{" "}
                     <a
-                      href="mailto:data@wheretopayless.tax"
+                      href="mailto:data@wheretopaylesstax.com"
                       className="text-primary-600 dark:text-primary-400 no-underline hover:underline"
                     >
-                      data@wheretopayless.tax
+                      data@wheretopaylesstax.com
                     </a>
                   </span>
                 </div>

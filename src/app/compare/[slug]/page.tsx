@@ -41,6 +41,11 @@ export function generateMetadata({
       title: `${countryA.name} vs ${countryB.name} Tax Comparison | WhereToPayLessTax`,
       description: `Side-by-side tax comparison: ${countryA.name} (${countryA.flag}) vs ${countryB.name} (${countryB.flag}).`,
     },
+    twitter: {
+      card: "summary_large_image",
+      title: `${countryA.name} vs ${countryB.name} Tax Comparison`,
+      description: `Income tax: ${countryA.incomeTax.topRate}% vs ${countryB.incomeTax.topRate}%. Corporate: ${countryA.corporateTax.standardRate}% vs ${countryB.corporateTax.standardRate}%.`,
+    },
     alternates: {
       canonical: `https://wheretopaylesstax.com/compare/${params.slug}`,
     },

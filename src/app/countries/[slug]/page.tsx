@@ -42,6 +42,11 @@ export function generateMetadata({
       title: `${country.name} Tax Guide | WhereToPayLessTax`,
       description: `Income tax ${country.incomeTax.topRate}%, Corporate tax ${country.corporateTax.standardRate}%, VAT ${country.vat.standardRate}%. Complete ${country.name} tax profile for expats and digital nomads.`,
     },
+    twitter: {
+      card: "summary_large_image",
+      title: `${country.name} Tax Guide | WhereToPayLessTax`,
+      description: `Income tax ${country.incomeTax.topRate}%, Corporate tax ${country.corporateTax.standardRate}%, VAT ${country.vat.standardRate}%.`,
+    },
     alternates: {
       canonical: `https://wheretopaylesstax.com/countries/${params.slug}`,
     },

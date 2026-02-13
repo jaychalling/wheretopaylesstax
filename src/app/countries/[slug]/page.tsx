@@ -9,6 +9,7 @@ import {
 } from "@/lib/data";
 import { getTaxRateColor } from "@/lib/utils";
 import AdPlaceholder from "@/components/AdPlaceholder";
+import TaxDisclaimer from "@/components/TaxDisclaimer";
 
 // Generate static params for all 50 countries
 export function generateStaticParams() {
@@ -40,6 +41,9 @@ export function generateMetadata({
     openGraph: {
       title: `${country.name} Tax Guide | WhereToPayLessTax`,
       description: `Income tax ${country.incomeTax.topRate}%, Corporate tax ${country.corporateTax.standardRate}%, VAT ${country.vat.standardRate}%. Complete ${country.name} tax profile for expats and digital nomads.`,
+    },
+    alternates: {
+      canonical: `https://wheretopayless.tax/countries/${params.slug}`,
     },
   };
 }
@@ -83,8 +87,50 @@ export default function CountryDetailPage({
     .slice(0, 5);
   const relatedComparisons = getRelatedComparisons(country.slug);
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://wheretopayless.tax",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Countries",
+        item: "https://wheretopayless.tax/countries",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: country.name,
+        item: `https://wheretopayless.tax/countries/${country.slug}`,
+      },
+    ],
+  };
+
+  const countryJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Country",
+    name: country.name,
+    url: `https://wheretopayless.tax/countries/${country.slug}`,
+    description: country.summary,
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(countryJsonLd) }}
+      />
+
       {/* Hero / Header */}
       <section className="bg-gradient-to-b from-primary-50 to-white dark:from-slate-800 dark:to-slate-900 border-b border-slate-200 dark:border-slate-700">
         <div className="page-container py-10 md:py-14">
@@ -514,6 +560,32 @@ export default function CountryDetailPage({
                 ))}
               </div>
             </section>
+
+            {/* Data Sources */}
+            <section>
+              <h2 className="text-xl font-heading font-bold mb-3">
+                Data Sources
+              </h2>
+              <div className="card text-sm text-slate-600 dark:text-slate-300 space-y-2">
+                <p>
+                  Tax rate data for {country.name} is compiled from the following
+                  authoritative sources:
+                </p>
+                <ul className="list-disc list-inside space-y-1 text-slate-500">
+                  <li>OECD Tax Database</li>
+                  <li>Tax Foundation International Tax Competitiveness Index</li>
+                  <li>World Bank Doing Business Reports</li>
+                  <li>{country.name} government tax authority publications</li>
+                  <li>PwC Worldwide Tax Summaries</li>
+                </ul>
+                <p className="text-xs text-slate-400">
+                  Last verified: {country.lastUpdated}
+                </p>
+              </div>
+            </section>
+
+            {/* Disclaimer */}
+            <TaxDisclaimer />
           </div>
 
           {/* Sidebar */}

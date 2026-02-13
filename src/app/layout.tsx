@@ -76,6 +76,42 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="font-body antialiased min-h-screen flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": "https://wheretopayless.tax/#organization",
+                  name: "WhereToPayLessTax",
+                  url: "https://wheretopayless.tax",
+                  description:
+                    "Compare tax rates across 50+ countries for digital nomads, freelancers, and expats.",
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://wheretopayless.tax/#website",
+                  url: "https://wheretopayless.tax",
+                  name: "WhereToPayLessTax",
+                  publisher: {
+                    "@id": "https://wheretopayless.tax/#organization",
+                  },
+                  potentialAction: {
+                    "@type": "SearchAction",
+                    target: {
+                      "@type": "EntryPoint",
+                      urlTemplate:
+                        "https://wheretopayless.tax/countries?q={search_term_string}",
+                    },
+                    "query-input": "required name=search_term_string",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

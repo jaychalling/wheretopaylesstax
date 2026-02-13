@@ -11,6 +11,7 @@ import {
 } from "@/lib/data";
 import { formatDate, getCategoryColor } from "@/lib/utils";
 import AdPlaceholder from "@/components/AdPlaceholder";
+import TaxDisclaimer from "@/components/TaxDisclaimer";
 import NewsletterForm from "@/components/NewsletterForm";
 
 // Generate static params for all 15 guide slugs
@@ -44,6 +45,9 @@ export function generateMetadata({
       card: "summary_large_image",
       title: guide.title,
       description: guide.metaDescription,
+    },
+    alternates: {
+      canonical: `https://wheretopayless.tax/guides/${params.slug}`,
     },
   };
 }
@@ -335,9 +339,38 @@ export default function GuideDetailPage({
     notFound();
   }
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://wheretopayless.tax",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Guides",
+        item: "https://wheretopayless.tax/guides",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: guide.title,
+        item: `https://wheretopayless.tax/guides/${guide.slug}`,
+      },
+    ],
+  };
+
   return (
     <>
       <ArticleJsonLd guide={guide} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
 
       <div className="section">
         <div className="page-container">
@@ -414,14 +447,8 @@ export default function GuideDetailPage({
               </div>
 
               {/* Disclaimer */}
-              <div className="mt-12 p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg">
-                <p className="text-sm text-amber-800 dark:text-amber-200">
-                  <strong>Disclaimer:</strong> This guide is for informational
-                  purposes only and does not constitute tax advice. Tax laws
-                  change frequently. Always consult a qualified tax professional
-                  before making decisions about your tax residency or
-                  obligations.
-                </p>
+              <div className="mt-12">
+                <TaxDisclaimer />
               </div>
 
               {/* Newsletter CTA */}

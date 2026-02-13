@@ -8,6 +8,7 @@ import {
 } from "@/lib/data";
 import { getTaxRateColorExplicit as getTaxRateColor } from "@/lib/utils";
 import AdPlaceholder from "@/components/AdPlaceholder";
+import TaxDisclaimer from "@/components/TaxDisclaimer";
 
 // Generate static params for all 20 comparison slugs
 export function generateStaticParams() {
@@ -39,6 +40,9 @@ export function generateMetadata({
     openGraph: {
       title: `${countryA.name} vs ${countryB.name} Tax Comparison | WhereToPayLessTax`,
       description: `Side-by-side tax comparison: ${countryA.name} (${countryA.flag}) vs ${countryB.name} (${countryB.flag}).`,
+    },
+    alternates: {
+      canonical: `https://wheretopayless.tax/compare/${params.slug}`,
     },
   };
 }
@@ -288,8 +292,38 @@ export default function CompareDetailPage({
     },
   ];
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://wheretopayless.tax",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Compare",
+        item: "https://wheretopayless.tax/compare",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: `${countryA.name} vs ${countryB.name}`,
+        item: `https://wheretopayless.tax/compare/${params.slug}`,
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+
       {/* Header */}
       <section className="bg-gradient-to-b from-primary-50 to-white dark:from-slate-800 dark:to-slate-900 border-b border-slate-200 dark:border-slate-700">
         <div className="page-container py-10 md:py-14">
@@ -351,6 +385,22 @@ export default function CompareDetailPage({
 
       <div className="page-container py-8 md:py-12">
         <div className="max-w-4xl mx-auto space-y-8">
+          {/* Country Profile Links */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              href={`/countries/${countryA.slug}`}
+              className="inline-flex items-center gap-2 text-sm no-underline text-primary-600 hover:text-primary-700 font-medium"
+            >
+              {countryA.flag} View {countryA.name} full profile &rarr;
+            </Link>
+            <Link
+              href={`/countries/${countryB.slug}`}
+              className="inline-flex items-center gap-2 text-sm no-underline text-primary-600 hover:text-primary-700 font-medium"
+            >
+              {countryB.flag} View {countryB.name} full profile &rarr;
+            </Link>
+          </div>
+
           {/* Winner Summary */}
           <WinnerSummary
             countryA={countryA}
@@ -505,6 +555,17 @@ export default function CompareDetailPage({
           {/* Ad */}
           <div className="flex justify-center">
             <AdPlaceholder size="rectangle" />
+          </div>
+
+          {/* Disclaimer */}
+          <TaxDisclaimer />
+
+          {/* Last Updated */}
+          <div className="text-center text-xs text-slate-400">
+            <p>
+              Data last updated: {countryA.name} ({countryA.lastUpdated}) &middot;{" "}
+              {countryB.name} ({countryB.lastUpdated})
+            </p>
           </div>
 
           {/* View country details links */}

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   getPopularComparisons,
@@ -6,6 +7,21 @@ import {
   getCountriesByRegion,
   type CountryData,
 } from "@/lib/data";
+
+export const metadata: Metadata = {
+  title: "Compare Taxes Across 50+ Countries | WhereToPayLessTax",
+  description:
+    "Compare income tax, corporate tax, VAT, and cost of living across 50+ countries. Find the best tax-friendly destinations for digital nomads, freelancers, and expats.",
+  openGraph: {
+    title: "Compare Taxes Across 50+ Countries | WhereToPayLessTax",
+    description:
+      "Side-by-side tax comparisons, country rankings, and expert guides. Make data-driven decisions about where to live and work.",
+    url: "https://wheretopayless.tax",
+  },
+  alternates: {
+    canonical: "https://wheretopayless.tax",
+  },
+};
 import { getTaxRateColor } from "@/lib/utils";
 import AdPlaceholder from "@/components/AdPlaceholder";
 import NewsletterForm from "@/components/NewsletterForm";

@@ -70,12 +70,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   // Country pages — use BUILD_DATE since data was recently verified
-  const countryPages: MetadataRoute.Sitemap = countries.map((country) => ({
-    url: `${BASE_URL}/countries/${country.slug}`,
-    lastModified: BUILD_DATE,
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  }));
+  const countryPages: MetadataRoute.Sitemap = countries.map((country) => {
+    // Boost priority for well-performing countries
+    let priority = 0.8;
+    let changeFrequency: "weekly" | "monthly" = "monthly";
+    
+    if (country.slug === 'hong-kong' || country.slug === 'greece') {
+      priority = 0.9;
+      changeFrequency = "weekly";
+    }
+    
+    return {
+      url: `${BASE_URL}/countries/${country.slug}`,
+      lastModified: BUILD_DATE,
+      changeFrequency,
+      priority,
+    };
+  });
 
   // Comparison pages
   const comparisonPages: MetadataRoute.Sitemap = comparisonSlugs.map(
@@ -88,12 +99,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
   );
 
   // Guide pages
-  const guidePages: MetadataRoute.Sitemap = guides.map((guide) => ({
-    url: `${BASE_URL}/guides/${guide.slug}`,
-    lastModified: BUILD_DATE,
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  }));
+  const guidePages: MetadataRoute.Sitemap = guides.map((guide) => {
+    // Boost priority for key guides
+    let priority = 0.7;
+    let changeFrequency: "weekly" | "monthly" = "monthly";
+    
+    if (guide.slug === 'tax-guide-digital-nomads') {
+      priority = 0.9;
+      changeFrequency = "weekly";
+    }
+    
+    return {
+      url: `${BASE_URL}/guides/${guide.slug}`,
+      lastModified: BUILD_DATE,
+      changeFrequency,
+      priority,
+    };
+  });
 
   return [...staticPages, ...countryPages, ...comparisonPages, ...guidePages];
 }

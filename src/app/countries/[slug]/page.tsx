@@ -27,9 +27,21 @@ export function generateMetadata({
     return { title: "Country Not Found" };
   }
 
+  // CTR-optimized titles for specific countries
+  let title = `${country.name} Tax Guide - Income Tax, Corporate Tax & More`;
+  let description = `Complete tax guide for ${country.name} (${country.flag}). Income tax up to ${country.incomeTax.topRate}%, corporate tax ${country.corporateTax.standardRate}%, VAT ${country.vat.standardRate}%. ${country.summary.slice(0, 120)}...`;
+  
+  if (country.slug === 'hong-kong') {
+    title = `🏙️ Hong Kong Sales Tax 2026: 0% VAT Heaven or Trap?`;
+    description = `Hong Kong has 0% sales tax/VAT! 🤯 But is it really tax paradise? Real costs: income tax up to ${country.incomeTax.topRate}%, living expenses. Expat truth revealed by locals.`;
+  } else if (country.slug === 'greece') {
+    title = `🇬🇷 Greece Income Tax 2026: 7% Flat Rate for Nomads!`;
+    description = `Greece offers 7% flat tax for digital nomads! 🔥 Plus 50% income tax exemption for new residents. Island life + low taxes = perfection? See real costs & requirements.`;
+  }
+
   return {
-    title: `${country.name} Tax Guide - Income Tax, Corporate Tax & More`,
-    description: `Complete tax guide for ${country.name} (${country.flag}). Income tax up to ${country.incomeTax.topRate}%, corporate tax ${country.corporateTax.standardRate}%, VAT ${country.vat.standardRate}%. ${country.summary.slice(0, 120)}...`,
+    title,
+    description,
     keywords: [
       `${country.name} taxes`,
       `${country.name} income tax`,

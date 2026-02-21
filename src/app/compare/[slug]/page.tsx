@@ -6,7 +6,6 @@ import {
   getComparisonBySlug,
   getRelatedComparisons,
   getRelatedGuides,
-  getAllGuides,
   type CountryData,
 } from "@/lib/data";
 import { getTaxRateColorExplicit as getTaxRateColor } from "@/lib/utils";
@@ -662,7 +661,7 @@ export default function CompareDetailPage({
           </section>
 
           {/* Slug-specific deep-dive content for high-value comparisons */}
-          <ComparisonDeepDive slug={params.slug} countryA={countryA} countryB={countryB} />
+          <ComparisonDeepDive slug={params.slug} />
 
           {/* Ad */}
           <div className="flex justify-center">
@@ -718,7 +717,7 @@ const COMPARISON_DEEP_CONTENT: Record<string, { heading: string; paragraphs: str
   },
 };
 
-function ComparisonDeepDive({ slug, countryA, countryB }: { slug: string; countryA: CountryData; countryB: CountryData }) {
+function ComparisonDeepDive({ slug }: { slug: string }) {
   const content = COMPARISON_DEEP_CONTENT[slug];
   if (!content) return null;
 

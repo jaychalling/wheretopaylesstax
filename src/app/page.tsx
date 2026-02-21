@@ -9,13 +9,13 @@ import {
 } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Compare Taxes Across 50+ Countries | WhereToPayLessTax",
+  title: "Compare Tax Rates by Country 2026 | WhereToPayLessTax",
   description:
-    "Compare income tax, corporate tax, VAT, and cost of living across 50+ countries. Find the best tax-friendly destinations for digital nomads, freelancers, and expats.",
+    "Compare income tax, corporate tax, VAT & capital gains across 50+ countries in 2026. Find the lowest tax destinations for expats, digital nomads & freelancers.",
   openGraph: {
-    title: "Compare Taxes Across 50+ Countries | WhereToPayLessTax",
+    title: "Compare Tax Rates by Country 2026 | WhereToPayLessTax",
     description:
-      "Side-by-side tax comparisons, country rankings, and expert guides. Make data-driven decisions about where to live and work.",
+      "Side-by-side tax comparisons, country rankings, and expert guides. Make data-driven decisions about where to live and work in 2026.",
     url: "https://wheretopaylesstax.com",
   },
   alternates: {
@@ -121,8 +121,36 @@ export default function Home() {
     })
     .filter(Boolean) as { countryA: CountryData; countryB: CountryData; slug: string }[];
 
+  const homeJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Compare Tax Rates by Country 2026",
+    description: "Compare income tax, corporate tax, VAT & capital gains across 50+ countries in 2026.",
+    url: "https://wheretopaylesstax.com",
+    isPartOf: { "@id": "https://wheretopaylesstax.com/#website" },
+    about: {
+      "@type": "Thing",
+      name: "International Tax Comparison",
+    },
+    mainEntity: {
+      "@type": "ItemList",
+      name: "Popular Tax Comparisons",
+      numberOfItems: comparisonData.length,
+      itemListElement: comparisonData.map((c, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: `${c.countryA.name} vs ${c.countryB.name} Tax Comparison`,
+        url: `https://wheretopaylesstax.com/compare/${c.slug}`,
+      })),
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
+      />
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary-900 via-primary-800 to-primary-950 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -230,6 +258,65 @@ export default function Home() {
             </p>
           </div>
           <RegionTabs regions={regions} regionCountries={regionCountries} />
+        </div>
+      </section>
+
+      {/* Featured Guides & Top Countries */}
+      <section className="section-sm">
+        <div className="page-container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Guides */}
+            <div>
+              <h2 className="text-2xl font-heading font-bold mb-4">
+                Tax Guides &amp; Insights
+              </h2>
+              <div className="space-y-3">
+                <Link href="/guides/capital-gains-tax-comparison" className="card-hover block no-underline group">
+                  <span className="text-sm font-medium text-primary-600 dark:text-primary-400 group-hover:underline">Capital Gains Tax by Country</span>
+                  <p className="text-xs text-slate-500 mt-1">Compare capital gains tax rates across 50+ countries. Find 0% CGT destinations for investors.</p>
+                </Link>
+                <Link href="/guides/tax-guide-digital-nomads" className="card-hover block no-underline group">
+                  <span className="text-sm font-medium text-primary-600 dark:text-primary-400 group-hover:underline">Digital Nomad Tax Guide 2026</span>
+                  <p className="text-xs text-slate-500 mt-1">Can digital nomads pay 0% tax legally? Discover strategies, the 183-day rule, and top destinations.</p>
+                </Link>
+                <Link href="/guides/freelancer-tax-optimization" className="card-hover block no-underline group">
+                  <span className="text-sm font-medium text-primary-600 dark:text-primary-400 group-hover:underline">Freelancer Tax Optimization</span>
+                  <p className="text-xs text-slate-500 mt-1">Best countries for self-employed tax rates, social security, and business-friendly regimes.</p>
+                </Link>
+                <div className="pt-2">
+                  <Link href="/guides" className="text-sm font-medium text-primary-600 hover:text-primary-700 no-underline">
+                    View all guides &rarr;
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Top Countries */}
+            <div>
+              <h2 className="text-2xl font-heading font-bold mb-4">
+                Trending Countries
+              </h2>
+              <div className="space-y-3">
+                <Link href="/countries/malta" className="card-hover block no-underline group">
+                  <span className="text-sm font-medium text-primary-600 dark:text-primary-400 group-hover:underline">Malta Tax Guide</span>
+                  <p className="text-xs text-slate-500 mt-1">EU member with competitive tax rates, global residence programme, and special expat schemes.</p>
+                </Link>
+                <Link href="/countries/cayman-islands" className="card-hover block no-underline group">
+                  <span className="text-sm font-medium text-primary-600 dark:text-primary-400 group-hover:underline">Cayman Islands Tax Profile</span>
+                  <p className="text-xs text-slate-500 mt-1">Zero income tax, zero capital gains, zero corporate tax. The ultimate tax-free jurisdiction.</p>
+                </Link>
+                <Link href="/countries/croatia" className="card-hover block no-underline group">
+                  <span className="text-sm font-medium text-primary-600 dark:text-primary-400 group-hover:underline">Croatia Tax Overview</span>
+                  <p className="text-xs text-slate-500 mt-1">EU member with digital nomad visa. Flat tax options and capital gains exempt after 2 years.</p>
+                </Link>
+                <div className="pt-2">
+                  <Link href="/rankings" className="text-sm font-medium text-primary-600 hover:text-primary-700 no-underline">
+                    View full rankings &rarr;
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

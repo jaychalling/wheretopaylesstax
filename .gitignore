@@ -45,6 +45,11 @@ next-env.d.ts
 .vercel
 .env*.local
 
+# AI tools
+.omc/
+.claude/
+nul
+
 # GSC / Google service account keys
 *.json.key
 *-credentials.json

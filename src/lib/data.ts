@@ -104,24 +104,24 @@ export interface ComparisonPair {
 const countries: CountryData[] = countriesData as CountryData[];
 const guides: GuideData[] = guidesData as GuideData[];
 
-// Popular comparison pairs
+// Popular comparison pairs — first 6 shown on home page (ordered by GSC performance)
 const POPULAR_COMPARISONS: ComparisonPair[] = [
-  { slug: "portugal-vs-spain", countryA: "portugal", countryB: "spain" },
-  { slug: "singapore-vs-hong-kong", countryA: "singapore", countryB: "hong-kong" },
-  { slug: "uae-vs-singapore", countryA: "uae", countryB: "singapore" },
   { slug: "usa-vs-canada", countryA: "usa", countryB: "canada" },
-  { slug: "uk-vs-ireland", countryA: "united-kingdom", countryB: "ireland" },
   { slug: "germany-vs-netherlands", countryA: "germany", countryB: "netherlands" },
+  { slug: "japan-vs-south-korea", countryA: "japan", countryB: "south-korea" },
+  { slug: "panama-vs-costa-rica", countryA: "panama", countryB: "costa-rica" },
+  { slug: "singapore-vs-hong-kong", countryA: "singapore", countryB: "hong-kong" },
+  { slug: "portugal-vs-spain", countryA: "portugal", countryB: "spain" },
+  { slug: "uae-vs-singapore", countryA: "uae", countryB: "singapore" },
+  { slug: "uk-vs-ireland", countryA: "united-kingdom", countryB: "ireland" },
   { slug: "thailand-vs-malaysia", countryA: "thailand", countryB: "malaysia" },
   { slug: "estonia-vs-portugal", countryA: "estonia", countryB: "portugal" },
   { slug: "switzerland-vs-germany", countryA: "switzerland", countryB: "germany" },
   { slug: "australia-vs-new-zealand", countryA: "australia", countryB: "new-zealand" },
-  { slug: "panama-vs-costa-rica", countryA: "panama", countryB: "costa-rica" },
-  { slug: "japan-vs-south-korea", countryA: "japan", countryB: "south-korea" },
+  { slug: "malta-vs-cyprus", countryA: "malta", countryB: "cyprus" },
   { slug: "france-vs-spain", countryA: "france", countryB: "spain" },
   { slug: "uae-vs-switzerland", countryA: "uae", countryB: "switzerland" },
   { slug: "bulgaria-vs-romania", countryA: "bulgaria", countryB: "romania" },
-  { slug: "malta-vs-cyprus", countryA: "malta", countryB: "cyprus" },
   { slug: "colombia-vs-mexico", countryA: "colombia", countryB: "mexico" },
   { slug: "usa-vs-uk", countryA: "usa", countryB: "united-kingdom" },
   { slug: "canada-vs-australia", countryA: "canada", countryB: "australia" },

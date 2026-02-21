@@ -4,6 +4,9 @@ import { notFound } from "next/navigation";
 import {
   getComparisonSlugs,
   getComparisonBySlug,
+  getRelatedComparisons,
+  getRelatedGuides,
+  getAllGuides,
   type CountryData,
 } from "@/lib/data";
 import { getTaxRateColorExplicit as getTaxRateColor } from "@/lib/utils";
@@ -658,10 +661,16 @@ export default function CompareDetailPage({
             </div>
           </section>
 
+          {/* Slug-specific deep-dive content for high-value comparisons */}
+          <ComparisonDeepDive slug={params.slug} countryA={countryA} countryB={countryB} />
+
           {/* Ad */}
           <div className="flex justify-center">
             <AdPlaceholder size="rectangle" />
           </div>
+
+          {/* Related Comparisons & Guides */}
+          <RelatedLinks countryASlug={countryA.slug} countryBSlug={countryB.slug} currentSlug={params.slug} />
 
           {/* Disclaimer */}
           <TaxDisclaimer />
@@ -692,5 +701,96 @@ export default function CompareDetailPage({
         </div>
       </div>
     </>
+  );
+}
+
+// Deep-dive content for high-value comparisons (improves rankings for thin pages)
+const COMPARISON_DEEP_CONTENT: Record<string, { heading: string; paragraphs: string[] }> = {
+  "usa-vs-canada": {
+    heading: "USA vs Canada Tax System: Key Differences Explained",
+    paragraphs: [
+      "The United States and Canada both use progressive federal income tax systems, but the similarities end there. The US federal income tax tops out at 37% (for income over $609,350 in 2026), while Canada's federal rate reaches 33% (for income over CAD $235,675). However, both countries add state/provincial taxes on top, which can dramatically change the picture.",
+      "In the US, state income tax ranges from 0% (in states like Texas, Florida, and Nevada) to 13.3% (California). Canada's provincial taxes range from 4% (Nunavut) to 21% (Nova Scotia's top bracket). This means an American in Texas could pay a combined top rate of 37%, while a Canadian in Nova Scotia faces up to 54%.",
+      "Capital gains treatment differs significantly. The US taxes long-term capital gains (assets held over 1 year) at preferential rates of 0%, 15%, or 20% depending on income. Canada includes only 50% of capital gains in taxable income (effectively halving the rate), but recent changes in 2024 increased the inclusion rate to 66.7% for gains over CAD $250,000.",
+      "For self-employed workers and freelancers, the US imposes a 15.3% self-employment tax (Social Security + Medicare), while Canada's CPP contribution rate for self-employed is 11.9% (2026). Both countries tax worldwide income for their residents, and the US uniquely taxes citizens abroad. Americans living in Canada can use the Foreign Tax Credit or Foreign Earned Income Exclusion to avoid double taxation.",
+      "Sales tax comparison: the US has no federal sales tax but states charge 0-10.25%, while Canada has a federal GST of 5% plus provincial sales taxes (HST) reaching up to 15% combined in some provinces. For businesses, Canada's lower corporate tax rate (combined federal/provincial average of ~26.5%) is competitive against the US flat 21% federal rate.",
+    ],
+  },
+};
+
+function ComparisonDeepDive({ slug, countryA, countryB }: { slug: string; countryA: CountryData; countryB: CountryData }) {
+  const content = COMPARISON_DEEP_CONTENT[slug];
+  if (!content) return null;
+
+  return (
+    <section>
+      <h2 className="text-xl font-heading font-bold mb-4">
+        {content.heading}
+      </h2>
+      <div className="space-y-4">
+        {content.paragraphs.map((p, i) => (
+          <p key={i} className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm">
+            {p}
+          </p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// Related comparisons and guides for internal linking
+function RelatedLinks({ countryASlug, countryBSlug, currentSlug }: { countryASlug: string; countryBSlug: string; currentSlug: string }) {
+  const relatedA = getRelatedComparisons(countryASlug).filter(p => p.slug !== currentSlug);
+  const relatedB = getRelatedComparisons(countryBSlug).filter(p => p.slug !== currentSlug && !relatedA.find(r => r.slug === p.slug));
+  const allRelated = [...relatedA, ...relatedB].slice(0, 4);
+
+  const guidesA = getRelatedGuides(countryASlug);
+  const guidesB = getRelatedGuides(countryBSlug).filter(g => !guidesA.find(ga => ga.slug === g.slug));
+  const allGuides = [...guidesA, ...guidesB].slice(0, 3);
+
+  if (allRelated.length === 0 && allGuides.length === 0) return null;
+
+  return (
+    <section>
+      <h2 className="text-xl font-heading font-bold mb-4">
+        Related Comparisons &amp; Guides
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {allRelated.length > 0 && (
+          <div>
+            <h3 className="text-sm font-heading font-semibold text-slate-500 uppercase tracking-wider mb-3">More Comparisons</h3>
+            <ul className="space-y-2">
+              {allRelated.map((pair) => (
+                <li key={pair.slug}>
+                  <Link
+                    href={`/compare/${pair.slug}`}
+                    className="text-sm text-primary-600 dark:text-primary-400 hover:underline no-underline font-medium"
+                  >
+                    {pair.countryA.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())} vs {pair.countryB.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())} Tax Comparison
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {allGuides.length > 0 && (
+          <div>
+            <h3 className="text-sm font-heading font-semibold text-slate-500 uppercase tracking-wider mb-3">Tax Guides</h3>
+            <ul className="space-y-2">
+              {allGuides.map((guide) => (
+                <li key={guide.slug}>
+                  <Link
+                    href={`/guides/${guide.slug}`}
+                    className="text-sm text-primary-600 dark:text-primary-400 hover:underline no-underline font-medium"
+                  >
+                    {guide.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </section>
   );
 }

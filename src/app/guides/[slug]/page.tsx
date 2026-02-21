@@ -6,6 +6,7 @@ import {
   getGuideBySlug,
   getGuidesByCategory,
   getCountryBySlug,
+  getComparisonBySlug,
   type GuideData,
   type GuideSection,
 } from "@/lib/data";
@@ -289,6 +290,42 @@ function RelatedCountries({ countrySlugs }: { countrySlugs: string[] }) {
   );
 }
 
+function RelatedComparisons({ comparisonSlugs }: { comparisonSlugs: string[] }) {
+  const comparisons = comparisonSlugs
+    .map((slug) => {
+      const data = getComparisonBySlug(slug);
+      if (!data) return null;
+      return { slug, countryA: data.countryA, countryB: data.countryB };
+    })
+    .filter(Boolean);
+
+  if (comparisons.length === 0) return null;
+
+  return (
+    <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-5">
+      <h3 className="text-sm font-heading font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-3">
+        Related Comparisons
+      </h3>
+      <ul className="space-y-2">
+        {comparisons.map((comp) =>
+          comp ? (
+            <li key={comp.slug}>
+              <Link
+                href={`/compare/${comp.slug}`}
+                className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 no-underline transition-colors"
+              >
+                <span>{comp.countryA.flag}</span>
+                <span className="font-medium">{comp.countryA.name} vs {comp.countryB.name}</span>
+                <span className="text-slate-400">&rarr;</span>
+              </Link>
+            </li>
+          ) : null
+        )}
+      </ul>
+    </div>
+  );
+}
+
 // Structured data for the article
 function ArticleJsonLd({ guide }: { guide: GuideData }) {
   const jsonLd = {
@@ -468,6 +505,7 @@ export default function GuideDetailPage({
               <div className="hidden lg:block lg:sticky lg:top-24">
                 <div className="space-y-6">
                   <TableOfContents sections={guide.sections} />
+                  <RelatedComparisons comparisonSlugs={guide.relatedComparisons} />
                   <RelatedCountries countrySlugs={guide.relatedCountries} />
                   <RelatedGuidesSidebar
                     currentSlug={guide.slug}
@@ -483,6 +521,7 @@ export default function GuideDetailPage({
 
               {/* Mobile only sidebar content */}
               <div className="lg:hidden space-y-6">
+                <RelatedComparisons comparisonSlugs={guide.relatedComparisons} />
                 <RelatedCountries countrySlugs={guide.relatedCountries} />
                 <RelatedGuidesSidebar
                   currentSlug={guide.slug}

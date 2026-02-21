@@ -1,16 +1,38 @@
+/**
+ * GSC (Google Search Console) Performance Analysis Script
+ *
+ * Usage:
+ *   GSC_KEY_PATH=/path/to/key.json node scripts/gsc-analysis.mjs
+ *   GSC_KEY_PATH=/path/to/key.json node scripts/gsc-analysis.mjs --days 30
+ *
+ * Environment:
+ *   GSC_KEY_PATH  — Path to Google service account JSON key file (required)
+ *   GSC_SITE_URL  — GSC property URL (default: https://wheretopaylesstax.com/)
+ */
 import { google } from "googleapis";
 import fs from "fs";
-import path from "path";
 
-const KEY_PATH = "E:/2026/Projects/GSC/gen-lang-client-0698230269-f4b11b3bb976.json";
-const SITE_URL = "sc-domain:wheretopaylesstax.com";
-const SITE_URL_ALT = "https://wheretopaylesstax.com/";
+const KEY_PATH = process.env.GSC_KEY_PATH;
+if (!KEY_PATH) {
+  console.error("Error: GSC_KEY_PATH environment variable is required.");
+  console.error("Usage: GSC_KEY_PATH=/path/to/key.json node scripts/gsc-analysis.mjs");
+  process.exit(1);
+}
+if (!fs.existsSync(KEY_PATH)) {
+  console.error(`Error: Key file not found: ${KEY_PATH}`);
+  process.exit(1);
+}
 
-// Date range: last 90 days
+const SITE_URL = process.env.GSC_SITE_URL || "https://wheretopaylesstax.com/";
+
+// Parse --days argument (default: 90)
+const daysArg = process.argv.indexOf("--days");
+const DAYS = daysArg !== -1 ? parseInt(process.argv[daysArg + 1], 10) : 90;
+
 const endDate = new Date();
 endDate.setDate(endDate.getDate() - 3); // GSC data has ~3 day delay
 const startDate = new Date(endDate);
-startDate.setDate(startDate.getDate() - 90);
+startDate.setDate(startDate.getDate() - DAYS);
 
 const formatDate = (d) => d.toISOString().split("T")[0];
 
@@ -24,23 +46,15 @@ async function getAuth() {
 }
 
 async function queryGSC(webmasters, siteUrl, params) {
-  try {
-    const res = await webmasters.searchanalytics.query({
-      siteUrl,
-      requestBody: {
-        startDate: formatDate(startDate),
-        endDate: formatDate(endDate),
-        ...params,
-      },
-    });
-    return res.data.rows || [];
-  } catch (e) {
-    if (siteUrl === SITE_URL) {
-      console.log(`  -> Domain property failed, trying URL property...`);
-      return queryGSC(webmasters, SITE_URL_ALT, params);
-    }
-    throw e;
-  }
+  const res = await webmasters.searchanalytics.query({
+    siteUrl,
+    requestBody: {
+      startDate: formatDate(startDate),
+      endDate: formatDate(endDate),
+      ...params,
+    },
+  });
+  return res.data.rows || [];
 }
 
 async function main() {
@@ -59,11 +73,9 @@ async function main() {
     console.log("사이트 목록 조회 실패:", e.message);
   }
 
-  let siteUrl = SITE_URL;
-
   // 1. Top Queries by Clicks
   console.log("\n=== 1. 상위 검색어 (클릭 기준 Top 50) ===");
-  const topQueries = await queryGSC(webmasters, siteUrl, {
+  const topQueries = await queryGSC(webmasters, SITE_URL, {
     dimensions: ["query"],
     rowLimit: 50,
     dataState: "final",
@@ -84,7 +96,7 @@ async function main() {
 
   // 2. Top Pages by Clicks
   console.log("\n=== 2. 상위 페이지 (클릭 기준 Top 30) ===");
-  const topPages = await queryGSC(webmasters, siteUrl, {
+  const topPages = await queryGSC(webmasters, SITE_URL, {
     dimensions: ["page"],
     rowLimit: 30,
     dataState: "final",
@@ -104,7 +116,7 @@ async function main() {
 
   // 3. CTR Opportunity: High impressions, low CTR
   console.log("\n=== 3. CTR 개선 기회 (노출 높지만 CTR 낮은 검색어) ===");
-  const ctrOpportunity = await queryGSC(webmasters, siteUrl, {
+  const ctrOpportunity = await queryGSC(webmasters, SITE_URL, {
     dimensions: ["query"],
     rowLimit: 1000,
     dataState: "final",
@@ -174,7 +186,7 @@ async function main() {
 
   // 6. Page-Query matrix: which queries lead to which pages
   console.log("\n=== 6. 페이지별 상위 검색어 (Top 10 페이지) ===");
-  const pageQuery = await queryGSC(webmasters, siteUrl, {
+  const pageQuery = await queryGSC(webmasters, SITE_URL, {
     dimensions: ["page", "query"],
     rowLimit: 500,
     dataState: "final",
@@ -220,7 +232,7 @@ async function main() {
 
   // 7. Device breakdown
   console.log("\n=== 7. 디바이스별 성과 ===");
-  const deviceData = await queryGSC(webmasters, siteUrl, {
+  const deviceData = await queryGSC(webmasters, SITE_URL, {
     dimensions: ["device"],
     dataState: "final",
   });
@@ -236,7 +248,7 @@ async function main() {
 
   // 8. Country breakdown
   console.log("\n=== 8. 국가별 성과 (Top 15) ===");
-  const countryData = await queryGSC(webmasters, siteUrl, {
+  const countryData = await queryGSC(webmasters, SITE_URL, {
     dimensions: ["country"],
     rowLimit: 15,
     dataState: "final",
@@ -253,7 +265,7 @@ async function main() {
 
   // 9. Date trend (weekly)
   console.log("\n=== 9. 주간 트렌드 ===");
-  const dateData = await queryGSC(webmasters, siteUrl, {
+  const dateData = await queryGSC(webmasters, SITE_URL, {
     dimensions: ["date"],
     dataState: "final",
   });

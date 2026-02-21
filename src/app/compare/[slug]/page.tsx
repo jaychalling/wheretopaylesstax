@@ -15,6 +15,42 @@ export function generateStaticParams() {
   return getComparisonSlugs().map((slug) => ({ slug }));
 }
 
+// CTR-optimized titles for high-volume comparison queries (from GSC data)
+const COMPARE_CTR_TITLES: Record<string, { title: string; description: string }> = {
+  "usa-vs-canada": {
+    title: "USA vs Canada Taxes 2026: Which Country Taxes You More?",
+    description: "USA vs Canada tax showdown! Income tax: up to 37% vs 33%. Compare federal + state/provincial rates, capital gains, sales tax & more. See which country wins.",
+  },
+  "italy-vs-portugal": {
+    title: "Italy vs Portugal Tax Rates 2026: Expat Tax Comparison",
+    description: "Italy vs Portugal for expats: compare flat tax schemes, NHR program, income tax brackets & cost of living. Which Mediterranean country saves you more?",
+  },
+  "panama-vs-costa-rica": {
+    title: "Panama vs Costa Rica Taxes 2026: Territorial Tax Showdown",
+    description: "Panama's territorial tax vs Costa Rica's rates compared. Income tax, corporate tax, VAT & nomad visas side by side. Best Central American tax haven?",
+  },
+  "germany-vs-netherlands": {
+    title: "Germany vs Netherlands Tax Rates 2026: Full Comparison",
+    description: "Germany vs Netherlands taxes compared: income tax up to 45% vs 49.5%, but the 30% ruling changes everything. Corporate tax, VAT & expat benefits.",
+  },
+  "singapore-vs-hong-kong": {
+    title: "Singapore vs Hong Kong Tax 2026: Asia's Top Tax Havens Compared",
+    description: "Singapore vs Hong Kong: 22% vs 17% income tax, 0% capital gains in both. Which Asian financial hub offers better tax benefits for expats?",
+  },
+  "france-vs-spain": {
+    title: "France vs Spain Tax Rates 2026: Expat Comparison Guide",
+    description: "France vs Spain taxes: income tax up to 45% vs 47%, plus Beckham Law benefits. Compare VAT, social security & expat tax regimes side by side.",
+  },
+  "bulgaria-vs-romania": {
+    title: "Bulgaria vs Romania Taxes 2026: EU's Lowest Tax Countries",
+    description: "Bulgaria 10% flat tax vs Romania 10% income tax. Compare corporate rates, VAT, social security & cost of living in EU's most affordable countries.",
+  },
+  "japan-vs-south-korea": {
+    title: "Japan vs South Korea Tax Rates 2026: East Asia Compared",
+    description: "Japan vs South Korea taxes: income tax up to 45% vs 45%, but brackets differ. Compare corporate tax, consumption tax & expat benefits.",
+  },
+};
+
 // SEO metadata
 export function generateMetadata({
   params,
@@ -27,24 +63,33 @@ export function generateMetadata({
   }
 
   const { countryA, countryB } = comparison;
+  const ctrOverride = COMPARE_CTR_TITLES[params.slug];
+
+  const title = ctrOverride?.title
+    ?? `${countryA.name} vs ${countryB.name} Tax Rates 2026: Full Comparison`;
+  const description = ctrOverride?.description
+    ?? `Compare taxes: ${countryA.name} vs ${countryB.name}. Income tax ${countryA.incomeTax.topRate}% vs ${countryB.incomeTax.topRate}%, corporate ${countryA.corporateTax.standardRate}% vs ${countryB.corporateTax.standardRate}%, VAT ${countryA.vat.standardRate}% vs ${countryB.vat.standardRate}%. Full 2026 breakdown.`;
+
   return {
-    title: `${countryA.name} vs ${countryB.name} - Tax Comparison`,
-    description: `Compare taxes between ${countryA.name} and ${countryB.name}. Income tax: ${countryA.incomeTax.topRate}% vs ${countryB.incomeTax.topRate}%. Corporate tax: ${countryA.corporateTax.standardRate}% vs ${countryB.corporateTax.standardRate}%. Full side-by-side breakdown.`,
+    title,
+    description,
     keywords: [
       `${countryA.name} vs ${countryB.name} taxes`,
-      `${countryA.name} tax comparison`,
-      `${countryB.name} tax comparison`,
+      `${countryA.name} vs ${countryB.name} tax comparison`,
+      `${countryA.name} tax rates 2026`,
+      `${countryB.name} tax rates 2026`,
+      `${countryA.name} vs ${countryB.name} income tax`,
       "tax comparison",
       "expat taxes",
     ],
     openGraph: {
-      title: `${countryA.name} vs ${countryB.name} Tax Comparison | WhereToPayLessTax`,
-      description: `Side-by-side tax comparison: ${countryA.name} (${countryA.flag}) vs ${countryB.name} (${countryB.flag}).`,
+      title: `${countryA.name} vs ${countryB.name} Tax Comparison 2026 | WhereToPayLessTax`,
+      description: `Side-by-side tax comparison: ${countryA.name} (${countryA.flag}) vs ${countryB.name} (${countryB.flag}). Income, corporate, VAT & more.`,
     },
     twitter: {
       card: "summary_large_image",
-      title: `${countryA.name} vs ${countryB.name} Tax Comparison`,
-      description: `Income tax: ${countryA.incomeTax.topRate}% vs ${countryB.incomeTax.topRate}%. Corporate: ${countryA.corporateTax.standardRate}% vs ${countryB.corporateTax.standardRate}%.`,
+      title,
+      description: `Income tax: ${countryA.incomeTax.topRate}% vs ${countryB.incomeTax.topRate}%. Corporate: ${countryA.corporateTax.standardRate}% vs ${countryB.corporateTax.standardRate}%. Full comparison.`,
     },
     alternates: {
       canonical: `https://wheretopaylesstax.com/compare/${params.slug}`,
@@ -322,11 +367,58 @@ export default function CompareDetailPage({
     ],
   };
 
+  // Determine tax winner for intro text
+  let taxWinsA = 0;
+  let taxWinsB = 0;
+  for (const row of taxRows) {
+    if (row.valueA < row.valueB) taxWinsA++;
+    else if (row.valueB < row.valueA) taxWinsB++;
+  }
+  const overallWinner = taxWinsA > taxWinsB ? countryA.name : taxWinsB > taxWinsA ? countryB.name : null;
+
+  // FAQ structured data for compare pages
+  const compareFaqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `Which has lower taxes, ${countryA.name} or ${countryB.name}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: overallWinner
+            ? `${overallWinner} has lower tax rates in more categories. ${countryA.name} has a top income tax of ${countryA.incomeTax.topRate}% vs ${countryB.name}'s ${countryB.incomeTax.topRate}%, corporate tax of ${countryA.corporateTax.standardRate}% vs ${countryB.corporateTax.standardRate}%, and VAT of ${countryA.vat.standardRate}% vs ${countryB.vat.standardRate}%.`
+            : `${countryA.name} and ${countryB.name} are evenly matched across tax categories. Income tax: ${countryA.incomeTax.topRate}% vs ${countryB.incomeTax.topRate}%. Corporate: ${countryA.corporateTax.standardRate}% vs ${countryB.corporateTax.standardRate}%. VAT: ${countryA.vat.standardRate}% vs ${countryB.vat.standardRate}%.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: `What is the income tax rate in ${countryA.name} vs ${countryB.name}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `${countryA.name} has a top income tax rate of ${countryA.incomeTax.topRate}%, while ${countryB.name} has ${countryB.incomeTax.topRate}%. ${countryA.incomeTax.topRate < countryB.incomeTax.topRate ? countryA.name : countryB.name} has the lower rate.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: `What is the corporate tax rate in ${countryA.name} vs ${countryB.name}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `${countryA.name}'s corporate tax rate is ${countryA.corporateTax.standardRate}%, compared to ${countryB.name}'s ${countryB.corporateTax.standardRate}%. ${countryA.corporateTax.standardRate < countryB.corporateTax.standardRate ? countryA.name : countryB.name} offers lower corporate taxation.`,
+        },
+      },
+    ],
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(compareFaqJsonLd) }}
       />
 
       {/* Header */}
@@ -383,13 +475,22 @@ export default function CompareDetailPage({
           </div>
 
           <h1 className="sr-only">
-            {countryA.name} vs {countryB.name} Tax Comparison
+            {countryA.name} vs {countryB.name} Tax Comparison 2026
           </h1>
         </div>
       </section>
 
       <div className="page-container py-8 md:py-12">
         <div className="max-w-4xl mx-auto space-y-8">
+          {/* SEO intro paragraph */}
+          <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-center max-w-2xl mx-auto">
+            Comparing tax rates between {countryA.name} and {countryB.name} for 2026.
+            {" "}{countryA.name} has a top income tax rate of {countryA.incomeTax.topRate}% vs {countryB.name}&apos;s {countryB.incomeTax.topRate}%,
+            corporate tax of {countryA.corporateTax.standardRate}% vs {countryB.corporateTax.standardRate}%,
+            and VAT of {countryA.vat.standardRate}% vs {countryB.vat.standardRate}%.
+            {overallWinner && ` Overall, ${overallWinner} offers lower tax rates in more categories.`}
+          </p>
+
           {/* Country Profile Links */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link

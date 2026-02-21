@@ -69,32 +69,36 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Country pages — use BUILD_DATE since data was recently verified
+  // Country pages — priorities based on GSC performance data
+  // High-impression countries get boosted priority + weekly crawl
+  const HIGH_IMPRESSION_COUNTRIES = new Set([
+    "hong-kong", "greece", "malta", "germany", "georgia",
+    "panama", "cayman-islands", "hungary", "croatia", "costa-rica",
+  ]);
+
   const countryPages: MetadataRoute.Sitemap = countries.map((country) => {
-    // Boost priority for well-performing countries
-    let priority = 0.8;
-    let changeFrequency: "weekly" | "monthly" = "monthly";
-    
-    if (country.slug === 'hong-kong' || country.slug === 'greece') {
-      priority = 0.9;
-      changeFrequency = "weekly";
-    }
-    
+    const isHighPerformer = HIGH_IMPRESSION_COUNTRIES.has(country.slug);
     return {
       url: `${BASE_URL}/countries/${country.slug}`,
       lastModified: BUILD_DATE,
-      changeFrequency,
-      priority,
+      changeFrequency: isHighPerformer ? "weekly" as const : "monthly" as const,
+      priority: isHighPerformer ? 0.9 : 0.8,
     };
   });
 
-  // Comparison pages
+  // Comparison pages — boost pages with GSC traction
+  const HIGH_IMPRESSION_COMPARISONS = new Set([
+    "usa-vs-canada", "italy-vs-portugal", "panama-vs-costa-rica",
+    "germany-vs-netherlands", "france-vs-spain", "japan-vs-south-korea",
+    "bulgaria-vs-romania",
+  ]);
+
   const comparisonPages: MetadataRoute.Sitemap = comparisonSlugs.map(
     (slug) => ({
       url: `${BASE_URL}/compare/${slug}`,
       lastModified: BUILD_DATE,
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
+      changeFrequency: HIGH_IMPRESSION_COMPARISONS.has(slug) ? "weekly" as const : "monthly" as const,
+      priority: HIGH_IMPRESSION_COMPARISONS.has(slug) ? 0.85 : 0.7,
     })
   );
 

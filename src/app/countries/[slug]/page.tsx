@@ -27,17 +27,53 @@ export function generateMetadata({
     return { title: "Country Not Found" };
   }
 
-  // CTR-optimized titles for specific countries
-  let title = `${country.name} Tax Guide - Income Tax, Corporate Tax & More`;
-  let description = `Complete tax guide for ${country.name} (${country.flag}). Income tax up to ${country.incomeTax.topRate}%, corporate tax ${country.corporateTax.standardRate}%, VAT ${country.vat.standardRate}%. ${country.summary.slice(0, 120)}...`;
-  
-  if (country.slug === 'hong-kong') {
-    title = `🏙️ Hong Kong Sales Tax 2026: 0% VAT Heaven or Trap?`;
-    description = `Hong Kong has 0% sales tax/VAT! 🤯 But is it really tax paradise? Real costs: income tax up to ${country.incomeTax.topRate}%, living expenses. Expat truth revealed by locals.`;
-  } else if (country.slug === 'greece') {
-    title = `🇬🇷 Greece Income Tax 2026: 7% Flat Rate for Nomads!`;
-    description = `Greece offers 7% flat tax for digital nomads! 🔥 Plus 50% income tax exemption for new residents. Island life + low taxes = perfection? See real costs & requirements.`;
-  }
+  // CTR-optimized titles based on GSC impression data
+  const CTR_TITLES: Record<string, { title: string; description: string }> = {
+    "hong-kong": {
+      title: "Hong Kong Tax Rates 2026: 0% VAT + Low Income Tax Guide",
+      description: `Hong Kong has 0% sales tax/VAT and max ${country.incomeTax.topRate}% income tax. Corporate tax just ${country.corporateTax.standardRate}%. Is it really a tax paradise? Full breakdown for expats & businesses.`,
+    },
+    "greece": {
+      title: "Greece Tax Rates 2026: 7% Flat Tax for Digital Nomads",
+      description: `Greece offers 7% flat tax for digital nomads + 50% income tax exemption for new residents. Standard rates: income ${country.incomeTax.topRate}%, corporate ${country.corporateTax.standardRate}%. Full expat guide.`,
+    },
+    "germany": {
+      title: "Germany Tax Rates 2026: Income Tax Brackets & Expat Guide",
+      description: `Germany income tax up to ${country.incomeTax.topRate}%, corporate tax ${country.corporateTax.standardRate}%, VAT ${country.vat.standardRate}%. Complete guide to German taxes for expats, freelancers & businesses.`,
+    },
+    "malta": {
+      title: "Malta Tax Rates 2026: Low EU Taxes for Expats & Nomads",
+      description: `Malta income tax up to ${country.incomeTax.topRate}%, corporate ${country.corporateTax.standardRate}% (effective 5% with refunds!). EU residence + English-speaking. Full tax guide for expats.`,
+    },
+    "georgia": {
+      title: "Georgia Tax Rates 2026: 1% for Small Business + Flat Tax",
+      description: `Georgia offers 1% tax for small businesses, ${country.incomeTax.topRate}% flat income tax, ${country.corporateTax.standardRate}% corporate tax. Digital nomad haven with low cost of living. Full guide.`,
+    },
+    "panama": {
+      title: "Panama Tax Rates 2026: Territorial Tax System Explained",
+      description: `Panama only taxes local income! Foreign income = 0% tax. Income tax up to ${country.incomeTax.topRate}%, corporate ${country.corporateTax.standardRate}%. Friendly Nations Visa details inside.`,
+    },
+    "cayman-islands": {
+      title: "Cayman Islands Tax Rates 2026: 0% Income & Corporate Tax",
+      description: `Cayman Islands charges 0% income tax, 0% corporate tax, 0% capital gains. But what are the real costs? Work permits, living expenses & hidden fees explained.`,
+    },
+    "croatia": {
+      title: "Croatia Tax Rates 2026: Digital Nomad Visa & EU Tax Guide",
+      description: `Croatia income tax ${country.incomeTax.topRate}%, corporate ${country.corporateTax.standardRate}%, VAT ${country.vat.standardRate}%. Popular digital nomad visa + EU residency. Full tax breakdown.`,
+    },
+    "hungary": {
+      title: "Hungary Tax Rates 2026: EU's Lowest Flat Tax at 15%",
+      description: `Hungary has EU's lowest flat income tax at ${country.incomeTax.topRate}% + ${country.corporateTax.standardRate}% corporate tax. Cost of living 40% below EU average. Full expat tax guide.`,
+    },
+    "costa-rica": {
+      title: "Costa Rica Tax Rates 2026: Territorial Tax for Expats",
+      description: `Costa Rica uses territorial taxation: foreign income not taxed. Local income tax up to ${country.incomeTax.topRate}%, VAT ${country.vat.standardRate}%. Digital nomad visa details inside.`,
+    },
+  };
+
+  const ctr = CTR_TITLES[country.slug];
+  const title = ctr?.title ?? `${country.name} Tax Rates 2026: Income, Corporate & VAT Guide`;
+  const description = ctr?.description ?? `${country.name} tax rates 2026: income tax up to ${country.incomeTax.topRate}%, corporate tax ${country.corporateTax.standardRate}%, VAT ${country.vat.standardRate}%. Complete guide for expats, digital nomads & businesses.`;
 
   return {
     title,
@@ -137,6 +173,56 @@ export default function CountryDetailPage({
     description: country.summary,
   };
 
+  // FAQ structured data for rich results in Google
+  const faqQuestions: { question: string; answer: string }[] = [
+    {
+      question: `What is the income tax rate in ${country.name}?`,
+      answer: `${country.name} has a top marginal income tax rate of ${country.incomeTax.topRate}%. ${country.incomeTax.brackets.length > 1 ? `There are ${country.incomeTax.brackets.length} tax brackets, starting at ${country.incomeTax.brackets[0].rate}%.` : `It uses a flat rate system.`}${country.incomeTax.notes ? ` ${country.incomeTax.notes}` : ""}`,
+    },
+    {
+      question: `What is the corporate tax rate in ${country.name}?`,
+      answer: `The standard corporate tax rate in ${country.name} is ${country.corporateTax.standardRate}%.${country.corporateTax.smallBusinessRate !== undefined ? ` Small businesses may qualify for a reduced rate of ${country.corporateTax.smallBusinessRate}%.` : ""}${country.corporateTax.notes ? ` ${country.corporateTax.notes}` : ""}`,
+    },
+    {
+      question: `What is the VAT rate in ${country.name}?`,
+      answer: `${country.name} has a standard VAT/sales tax rate of ${country.vat.standardRate}%.${country.vat.reducedRates.length > 0 ? ` Reduced rates of ${country.vat.reducedRates.join("%, ")}% apply to certain goods and services.` : ""}`,
+    },
+  ];
+
+  if (country.digitalNomadVisa && country.digitalNomadVisaDetails) {
+    faqQuestions.push({
+      question: `Does ${country.name} offer a digital nomad visa?`,
+      answer: `Yes, ${country.name} offers a digital nomad visa. ${country.digitalNomadVisaDetails}`,
+    });
+  }
+
+  if (country.specialRegimes.length > 0) {
+    faqQuestions.push({
+      question: `Are there special tax regimes in ${country.name} for expats?`,
+      answer: `Yes, ${country.name} offers ${country.specialRegimes.length} special tax regime${country.specialRegimes.length > 1 ? "s" : ""}: ${country.specialRegimes.map((r) => `${r.name} - ${r.description.slice(0, 100)}`).join("; ")}.`,
+    });
+  }
+
+  if (country.capitalGainsTax.rate === 0) {
+    faqQuestions.push({
+      question: `Does ${country.name} tax capital gains?`,
+      answer: `No, ${country.name} has a 0% capital gains tax rate, making it attractive for investors and crypto holders.${country.capitalGainsTax.notes ? ` ${country.capitalGainsTax.notes}` : ""}`,
+    });
+  }
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqQuestions.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+
   return (
     <>
       <script
@@ -146,6 +232,10 @@ export default function CountryDetailPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(countryJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
       {/* Hero / Header */}

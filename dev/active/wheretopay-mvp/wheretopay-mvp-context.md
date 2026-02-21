@@ -70,11 +70,15 @@
 - First Load JS: ~96-99KB
 - Static (○) + SSG (●) + Dynamic (ƒ) 혼합
 
-## SEO 현황 (2026-02-13 완료)
+## SEO 현황 (2026-02-13 완료, 2026-02-21 GSC 기반 개선)
 - **Google Search Console**: 인증 완료 + sitemap 제출
 - **Sitemap**: 94 URLs (static 9 + country 50 + comparison 20 + guide 15)
+- **Sitemap 우선순위**: GSC 데이터 기반 동적 조정 (고노출 국가 10개 + 비교 7개 → 0.85~0.9 + weekly)
 - **Canonical URLs**: 전 페이지 적용
-- **JSON-LD**: Organization, WebSite+SearchAction, BreadcrumbList, Country, Article
+- **JSON-LD**: Organization, WebSite+SearchAction, BreadcrumbList, Country, FAQPage, Article
+- **FAQPage 스키마**: 국가 페이지 (3~6개 FAQ 동적 생성) + 비교 페이지 (3개 FAQ)
+- **CTR 최적화 타이틀**: 국가 10개 + 비교 8개 맞춤 타이틀 (GSC 고노출 페이지 기반)
+- **연도 표시**: 모든 타이틀에 "2026" 포함 (검색 신선도 신호)
 - **Twitter Cards**: 전 페이지 `summary_large_image`
 - **OG Tags**: 전 페이지 적용
 - **robots.txt**: /api/, /_next/ 차단
@@ -83,9 +87,19 @@
 - **외부 링크 보안**: 전부 `rel="noopener noreferrer"` 적용
 - **404 페이지**: 검색바 + 홈/국가 링크 (이탈 방지)
 
+## GSC 성과 데이터 (2026-02-21 기준, 최근 2주)
+- **총 노출**: 808회 | **총 클릭**: 3회 | **CTR**: 0.4%
+- **발견된 검색어**: 150개
+- **1페이지 진입 페이지**: italy-vs-portugal(5.3), panama-vs-costa-rica(5.5), georgia(8.8), germany(9.3)
+- **고노출 페이지**: usa-vs-canada(77), malta(72), greece(72), germany(34), panama(31)
+- **주요 검색어 클러스터**: canada-vs-us tax, digital nomad tax, greece income tax, cayman islands tax
+- **지역**: USA 40%, UK 9%, Canada 3%, France 3%
+- **디바이스**: Desktop 87%, Mobile 10%, Tablet 3%
+
 ## 현재 상태
 - **MVP 구현 완료** (2026-02-11~12)
 - **SEO/품질 개선 완료** (2026-02-13) — 8건 품질 수정 + 도메인 + 서치콘솔
+- **GSC 기반 SEO 최적화** (2026-02-21) — CTR 타이틀, FAQ 스키마, 사이트맵 우선순위
 - Production 배포 정상
 
 ## 다음 단계 (v1.1 후보)

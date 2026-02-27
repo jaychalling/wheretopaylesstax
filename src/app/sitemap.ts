@@ -3,8 +3,8 @@ import { getAllCountries, getAllGuides, getComparisonSlugs } from "@/lib/data";
 
 const BASE_URL = "https://wheretopaylesstax.com";
 
-// Fixed build date to avoid lastModified changing on every deploy
-const BUILD_DATE = "2026-02-13T00:00:00Z";
+// Build date for static pages; guide/country pages use their own lastUpdated
+const BUILD_DATE = new Date().toISOString();
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const countries = getAllCountries();
@@ -78,9 +78,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const countryPages: MetadataRoute.Sitemap = countries.map((country) => {
     const isHighPerformer = HIGH_IMPRESSION_COUNTRIES.has(country.slug);
+    // Use country's lastUpdated if available
+    const countryDate = country.lastUpdated
+      ? `${country.lastUpdated}T00:00:00Z`
+      : BUILD_DATE;
     return {
       url: `${BASE_URL}/countries/${country.slug}`,
-      lastModified: BUILD_DATE,
+      lastModified: countryDate,
       changeFrequency: isHighPerformer ? "weekly" as const : "monthly" as const,
       priority: isHighPerformer ? 0.9 : 0.8,
     };
@@ -102,20 +106,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })
   );
 
-  // Guide pages
+  // Guide pages — use per-guide lastUpdated when available
   const guidePages: MetadataRoute.Sitemap = guides.map((guide) => {
     // Boost priority for key guides
     let priority = 0.7;
     let changeFrequency: "weekly" | "monthly" = "monthly";
-    
+
     if (guide.slug === 'tax-guide-digital-nomads') {
       priority = 0.9;
       changeFrequency = "weekly";
     }
-    
+
+    // Use guide's lastUpdated (format "2026-02") or fall back to BUILD_DATE
+    const guideDate = guide.lastUpdated
+      ? `${guide.lastUpdated}-01T00:00:00Z`
+      : BUILD_DATE;
+
     return {
       url: `${BASE_URL}/guides/${guide.slug}`,
-      lastModified: BUILD_DATE,
+      lastModified: guideDate,
       changeFrequency,
       priority,
     };

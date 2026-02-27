@@ -21,6 +21,34 @@ export function generateStaticParams() {
   return guides.map((guide) => ({ slug: guide.slug }));
 }
 
+// CTR-optimized overrides for high-opportunity guides (from GSC data)
+const GUIDE_CTR_TITLES: Record<string, { title: string; description: string }> = {
+  "southeast-asia-tax-guide": {
+    title: "Southeast Asia Tax Guide 2026: Thailand, Vietnam, Malaysia & More",
+    description: "Southeast Asia tax rates compared: Thailand 0-35%, Vietnam 5-35%, Malaysia territorial system. Digital nomad visas, cost of living & expat strategies for SE Asia.",
+  },
+  "zero-tax-countries": {
+    title: "Zero Tax Countries 2026: 9 Countries with 0% Income Tax",
+    description: "Countries with 0% income tax: UAE, Cayman Islands, Bahamas, Monaco & more. Are they really tax-free? Residency requirements, hidden costs & how to qualify.",
+  },
+  "freelancer-tax-optimization": {
+    title: "Freelancer Tax Optimization 2026: Best Countries for Self-Employed",
+    description: "Best countries for freelancers: Georgia 1%, Bulgaria 10%, Romania 10%, Estonia 0% on retained profits. Compare freelancer tax rates, social security & visas.",
+  },
+  "territorial-tax-systems": {
+    title: "Territorial Tax Countries 2026: Only Pay Tax on Local Income",
+    description: "Territorial tax systems explained: Panama, Costa Rica, Malaysia, Paraguay & more only tax local income. Foreign income = 0% tax. Full country list & strategies.",
+  },
+  "best-countries-corporate-tax": {
+    title: "Lowest Corporate Tax Countries 2026: Where to Register Your Business",
+    description: "Lowest corporate tax rates: Hungary 9%, Ireland 12.5%, Bulgaria 10%, UAE 0%. Compare 50+ countries and find the best place to register your company.",
+  },
+  "lowest-tax-countries-europe": {
+    title: "Lowest Tax Countries in Europe 2026: Tax-Friendly EU & Non-EU",
+    description: "Europe's lowest tax countries: Bulgaria 10%, Hungary 15%, Romania 10%. Plus non-EU options like Georgia 1%. Expat-friendly regimes & residency routes compared.",
+  },
+};
+
 // Generate metadata for each guide
 export function generateMetadata({
   params,
@@ -32,20 +60,24 @@ export function generateMetadata({
     return { title: "Guide Not Found" };
   }
 
+  const ctrOverride = GUIDE_CTR_TITLES[params.slug];
+  const title = ctrOverride?.title ?? guide.title;
+  const description = ctrOverride?.description ?? guide.metaDescription;
+
   return {
-    title: guide.title,
-    description: guide.metaDescription,
+    title,
+    description,
     keywords: guide.targetKeywords,
     openGraph: {
-      title: guide.title,
-      description: guide.metaDescription,
+      title,
+      description,
       type: "article",
       publishedTime: `${guide.lastUpdated}-01T00:00:00Z`,
     },
     twitter: {
       card: "summary_large_image",
-      title: guide.title,
-      description: guide.metaDescription,
+      title,
+      description,
     },
     alternates: {
       canonical: `https://wheretopaylesstax.com/guides/${params.slug}`,
@@ -326,6 +358,48 @@ function RelatedComparisons({ comparisonSlugs }: { comparisonSlugs: string[] }) 
   );
 }
 
+// FAQPage structured data generated from guide sections
+function FAQPageJsonLd({ guide }: { guide: GuideData }) {
+  // Generate FAQ items from sections that have question-like headings or substantial content
+  const faqItems = guide.sections
+    .filter((s) => s.content.length > 50)
+    .slice(0, 6)
+    .map((section) => {
+      // Use heading as question, first ~300 chars of content as answer
+      const question = section.heading.endsWith("?")
+        ? section.heading
+        : `What about ${section.heading.toLowerCase()}?`;
+      const answer = section.content
+        .replace(/\*\*/g, "")
+        .replace(/\n/g, " ")
+        .slice(0, 300)
+        .trim();
+      return {
+        "@type": "Question" as const,
+        name: question,
+        acceptedAnswer: {
+          "@type": "Answer" as const,
+          text: answer + (section.content.length > 300 ? "..." : ""),
+        },
+      };
+    });
+
+  if (faqItems.length === 0) return null;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems,
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  );
+}
+
 // Structured data for the article
 function ArticleJsonLd({ guide }: { guide: GuideData }) {
   const jsonLd = {
@@ -404,6 +478,7 @@ export default function GuideDetailPage({
   return (
     <>
       <ArticleJsonLd guide={guide} />
+      <FAQPageJsonLd guide={guide} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}

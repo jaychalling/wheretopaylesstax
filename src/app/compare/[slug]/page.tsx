@@ -87,11 +87,20 @@ export function generateMetadata({
     openGraph: {
       title: `${countryA.name} vs ${countryB.name} Tax Comparison 2026 | WhereToPayLessTax`,
       description: `Side-by-side tax comparison: ${countryA.name} (${countryA.flag}) vs ${countryB.name} (${countryB.flag}). Income, corporate, VAT & more.`,
+      images: [
+        {
+          url: `/compare/${params.slug}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: `${countryA.name} vs ${countryB.name} Tax Comparison 2026`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description: `Income tax: ${countryA.incomeTax.topRate}% vs ${countryB.incomeTax.topRate}%. Corporate: ${countryA.corporateTax.standardRate}% vs ${countryB.corporateTax.standardRate}%. Full comparison.`,
+      images: [`/compare/${params.slug}/opengraph-image`],
     },
     alternates: {
       canonical: `https://wheretopaylesstax.com/compare/${params.slug}`,

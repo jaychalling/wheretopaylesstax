@@ -6,7 +6,7 @@ import RankingsTable from "@/components/RankingsTable";
 export const metadata: Metadata = {
   title: "Lowest Tax Countries 2026 - Tax Rankings Worldwide",
   description:
-    "Ranked: lowest tax countries in the world for 2026. Sort 50+ countries by income tax, corporate tax, VAT & capital gains. Find your ideal tax-friendly destination.",
+    "Compare tax rates across 50+ countries in 2026. Find the lowest income tax, corporate tax, and VAT rates worldwide. Sort rankings by any tax type to find your ideal destination.",
   keywords: [
     "lowest tax countries 2026",
     "tax rankings",
@@ -19,7 +19,22 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Lowest Tax Countries 2026 - Rankings | WhereToPayLessTax",
     description:
-      "Ranked: lowest tax countries in the world for 2026 across income tax, corporate tax, VAT, and capital gains.",
+      "Compare tax rates across 50+ countries in 2026. Find the lowest income tax, corporate tax, and VAT rates worldwide.",
+    images: [
+      {
+        url: "/rankings/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Tax Rankings - Lowest Tax Countries 2026",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lowest Tax Countries 2026 - Rankings | WhereToPayLessTax",
+    description:
+      "Compare tax rates across 50+ countries in 2026. Find the lowest income tax, corporate tax, and VAT rates worldwide.",
+    images: ["/rankings/opengraph-image"],
   },
   alternates: {
     canonical: "https://wheretopaylesstax.com/rankings",

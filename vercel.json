@@ -1,3 +1,27 @@
 {
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "wheretopaylesstax.vercel.app"
+        }
+      ],
+      "destination": "https://wheretopaylesstax.com/",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "wheretopaylesstax.vercel.app"
+        }
+      ],
+      "destination": "https://wheretopaylesstax.com/:path*",
+      "permanent": true
+    }
+  ]
 }

@@ -69,6 +69,26 @@ export function generateMetadata({
       title: "Costa Rica Tax Rates 2026: Territorial Tax for Expats",
       description: `Costa Rica uses territorial taxation: foreign income not taxed. Local income tax up to ${country.incomeTax.topRate}%, VAT ${country.vat.standardRate}%. Digital nomad visa details inside.`,
     },
+    "netherlands": {
+      title: "Netherlands Tax Rates 2026: 30% Ruling & Expat Guide",
+      description: `Netherlands income tax up to ${country.incomeTax.topRate}%, but the 30% ruling means expats can receive 30% of salary tax-free. Corporate ${country.corporateTax.standardRate}%, VAT ${country.vat.standardRate}%. Full guide.`,
+    },
+    "italy": {
+      title: "Italy Tax Rates 2026: 7% Flat Tax for Retirees & Expats",
+      description: `Italy offers 7% flat tax for retirees moving south + new resident regime. Standard income tax up to ${country.incomeTax.topRate}%, corporate ${country.corporateTax.standardRate}%. Complete expat tax guide.`,
+    },
+    "switzerland": {
+      title: "Switzerland Tax Rates 2026: Low Taxes, High Salaries",
+      description: `Switzerland income tax ${country.incomeTax.topRate}% (varies by canton), corporate ${country.corporateTax.standardRate}%, VAT just ${country.vat.standardRate}%. Lump-sum taxation for wealthy expats explained.`,
+    },
+    "portugal": {
+      title: "Portugal Tax Rates 2026: NHR Program & Digital Nomad Visa",
+      description: `Portugal's NHR offers 20% flat tax on certain incomes. Standard income tax up to ${country.incomeTax.topRate}%, corporate ${country.corporateTax.standardRate}%. Digital nomad visa + D7 visa details.`,
+    },
+    "romania": {
+      title: "Romania Tax Rates 2026: EU's 10% Flat Tax Country",
+      description: `Romania has 10% flat income tax, ${country.corporateTax.standardRate}% corporate tax, VAT ${country.vat.standardRate}%. One of EU's cheapest countries with low taxes. Full guide for expats.`,
+    },
   };
 
   const ctr = CTR_TITLES[country.slug];
@@ -89,11 +109,20 @@ export function generateMetadata({
     openGraph: {
       title: `${country.name} Tax Guide | WhereToPayLessTax`,
       description: `Income tax ${country.incomeTax.topRate}%, Corporate tax ${country.corporateTax.standardRate}%, VAT ${country.vat.standardRate}%. Complete ${country.name} tax profile for expats and digital nomads.`,
+      images: [
+        {
+          url: `/countries/${params.slug}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: `${country.name} Tax Rates 2026`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: `${country.name} Tax Guide | WhereToPayLessTax`,
       description: `Income tax ${country.incomeTax.topRate}%, Corporate tax ${country.corporateTax.standardRate}%, VAT ${country.vat.standardRate}%.`,
+      images: [`/countries/${params.slug}/opengraph-image`],
     },
     alternates: {
       canonical: `https://wheretopaylesstax.com/countries/${params.slug}`,

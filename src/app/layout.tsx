@@ -51,12 +51,21 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "WhereToPayLessTax",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "WhereToPayLessTax - Compare Tax Rates by Country",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "WhereToPayLessTax - Compare Taxes. Move Smarter.",
     description:
       "Compare tax rates across 50+ countries for digital nomads and expats.",
+    images: ["/opengraph-image"],
   },
   icons: {
     icon: "/favicon.svg",

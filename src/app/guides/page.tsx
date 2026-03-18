@@ -12,6 +12,15 @@ export const metadata: Metadata = {
     description:
       "In-depth guides on international tax planning, digital nomad taxes, freelancer optimization, and the best low-tax countries.",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Tax Guides & Articles | WhereToPayLessTax",
+    description:
+      "In-depth guides on international tax planning, digital nomad taxes, freelancer optimization, and the best low-tax countries for expats and remote workers.",
+  },
+  alternates: {
+    canonical: "https://wheretopaylesstax.com/guides",
+  },
 };
 
 function GuideCard({ guide }: { guide: GuideData }) {

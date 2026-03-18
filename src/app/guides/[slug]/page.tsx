@@ -73,11 +73,20 @@ export function generateMetadata({
       description,
       type: "article",
       publishedTime: `${guide.lastUpdated}-01T00:00:00Z`,
+      images: [
+        {
+          url: `/guides/${params.slug}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [`/guides/${params.slug}/opengraph-image`],
     },
     alternates: {
       canonical: `https://wheretopaylesstax.com/guides/${params.slug}`,
@@ -365,21 +374,20 @@ function FAQPageJsonLd({ guide }: { guide: GuideData }) {
     .filter((s) => s.content.length > 50)
     .slice(0, 6)
     .map((section) => {
-      // Use heading as question, first ~300 chars of content as answer
+      // Use heading as question, full content as answer (no truncation)
       const question = section.heading.endsWith("?")
         ? section.heading
         : `What about ${section.heading.toLowerCase()}?`;
       const answer = section.content
         .replace(/\*\*/g, "")
         .replace(/\n/g, " ")
-        .slice(0, 300)
         .trim();
       return {
         "@type": "Question" as const,
         name: question,
         acceptedAnswer: {
           "@type": "Answer" as const,
-          text: answer + (section.content.length > 300 ? "..." : ""),
+          text: answer,
         },
       };
     });

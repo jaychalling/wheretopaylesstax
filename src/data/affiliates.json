@@ -1,0 +1,32 @@
+[
+  {
+    "id": "wise",
+    "name": "Wise",
+    "category": "International Money Transfers",
+    "tagline": "Send money abroad at the mid-market rate",
+    "description": "Moving between countries usually means moving money between currencies. Wise offers multi-currency accounts and international transfers at the real mid-market exchange rate with transparent fees, which generally makes it one of the most cost-effective options for expats, freelancers invoicing clients abroad, and anyone relocating.",
+    "url": "https://wise.com",
+    "cta": "Check Wise rates",
+    "audience": ["expat", "freelancer", "nomad"]
+  },
+  {
+    "id": "safetywing",
+    "name": "SafetyWing",
+    "category": "International Health Insurance",
+    "tagline": "Health coverage built for nomads and remote workers",
+    "description": "Most domestic health plans stop at the border, and many digital nomad visas require proof of international health coverage. SafetyWing offers subscription-style travel medical and global health insurance designed for remote workers and frequent movers, with coverage that follows you across countries.",
+    "url": "https://safetywing.com",
+    "cta": "Explore SafetyWing plans",
+    "audience": ["nomad", "expat", "freelancer"]
+  },
+  {
+    "id": "freshbooks",
+    "name": "FreshBooks",
+    "category": "Accounting & Tax Software",
+    "tagline": "Invoicing, expenses, and tax-ready books for the self-employed",
+    "description": "If you earn income across borders, clean books are the difference between a smooth tax filing and an expensive headache. Cloud accounting software like FreshBooks handles multi-currency invoicing, expense tracking, and tax-time reports, which generally makes working with an accountant in any country far easier.",
+    "url": "https://www.freshbooks.com",
+    "cta": "Try accounting software",
+    "audience": ["freelancer", "business"]
+  }
+]

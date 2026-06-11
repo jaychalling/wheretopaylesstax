@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Lexend, Source_Sans_3 } from "next/font/google";
 import localFont from "next/font/local";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import "./globals.css";
+
+// AdSense is only loaded when NEXT_PUBLIC_ADSENSE_CLIENT is set (no hardcoded ca-pub ID).
+const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
 
 const lexend = Lexend({
   subsets: ["latin"],
@@ -91,6 +95,15 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="font-body antialiased min-h-screen flex flex-col">
+        {ADSENSE_CLIENT && (
+          <Script
+            id="adsense-loader"
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

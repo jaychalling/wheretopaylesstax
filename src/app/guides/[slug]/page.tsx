@@ -12,6 +12,7 @@ import {
 } from "@/lib/data";
 import { formatDate, getCategoryColor } from "@/lib/utils";
 import AdPlaceholder from "@/components/AdPlaceholder";
+import AffiliateSection from "@/components/AffiliateSection";
 import TaxDisclaimer from "@/components/TaxDisclaimer";
 import NewsletterForm from "@/components/NewsletterForm";
 
@@ -564,6 +565,11 @@ export default function GuideDetailPage({
                 {guide.sections.map((section, idx) => (
                   <SectionContent key={idx} section={section} index={idx} />
                 ))}
+              </div>
+
+              {/* Affiliate tools */}
+              <div className="mt-12">
+                <AffiliateSection />
               </div>
 
               {/* Disclaimer */}

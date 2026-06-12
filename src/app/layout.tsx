@@ -9,6 +9,8 @@ import "./globals.css";
 // AdSense is only loaded when NEXT_PUBLIC_ADSENSE_CLIENT is set (no hardcoded ca-pub ID).
 const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
 
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID || "G-R8QPDPEK50";
+
 const lexend = Lexend({
   subsets: ["latin"],
   variable: "--font-lexend",
@@ -95,6 +97,18 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="font-body antialiased min-h-screen flex flex-col">
+        <Script
+          id="ga-loader"
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="ga-config" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');`}
+        </Script>
         {ADSENSE_CLIENT && (
           <Script
             id="adsense-loader"
